@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.khudyakovvladimir.objects.dependencies.AppComponent
 import com.khudyakovvladimir.objects.dependencies.DaggerAppComponent
+import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 
 class MyApplication: Application() {
