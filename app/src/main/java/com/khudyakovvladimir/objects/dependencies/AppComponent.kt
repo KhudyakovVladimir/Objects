@@ -6,6 +6,7 @@ import androidx.fragment.app.ListFragment
 import androidx.room.Room
 import com.khudyakovvladimir.objects.database.DBHelper
 import com.khudyakovvladimir.objects.database.ObjectDatabase
+import com.khudyakovvladimir.objects.view.ObjectFragment
 import dagger.BindsInstance
 import dagger.Component
 import dagger.Module
@@ -15,6 +16,7 @@ import dagger.Provides
 interface AppComponent {
 
     fun injectListFragment(list: com.khudyakovvladimir.objects.view.ListFragment)
+    fun injectObjectFragment(objectFragment: ObjectFragment)
 
     @Component.Builder
     interface Builder {

@@ -10,6 +10,9 @@ interface ObjectDao {
     fun getAllObjects(): List<ObjectEntity>
 
     @Query("SELECT * FROM objects")
+    fun getAllNotesAsList(): List<ObjectEntity>
+
+    @Query("SELECT * FROM objects")
     fun getAllObjectsAsLiveData(): LiveData<List<ObjectEntity>>?
 
     @Query("SELECT COUNT(*) FROM objects")

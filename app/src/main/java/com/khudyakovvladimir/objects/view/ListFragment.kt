@@ -78,6 +78,7 @@ class ListFragment: Fragment() {
         ))
 
         recyclerView = view.findViewById(R.id.recyclerView)
+        fab = view.findViewById(R.id.floatingActionButton)
         //recyclerView.visibility = View.INVISIBLE
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
 
@@ -93,9 +94,12 @@ class ListFragment: Fragment() {
         objectViewModel.getListObjects().observe(this) {
             objectAdapter.list = it
             objectAdapter.notifyDataSetChanged()
-            Log.d("TAG", "LIST = $list")
+            Log.d("TAG", "LIST = $it")
         }
 
+        fab.setOnClickListener {
+            findNavController().navigate(R.id.objectFragment)
+        }
     }
 
     private fun navigateToSingleObject(objectID: Int) {

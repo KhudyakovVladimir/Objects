@@ -24,19 +24,20 @@ class ObjectAdapter(
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     inner class ObjectViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        lateinit var imageView: ImageView
-        lateinit var textView: TextView
-        lateinit var textViewTwo: TextView
+        lateinit var textView1: TextView
+        lateinit var textView2: TextView
+        lateinit var textView3: TextView
         lateinit var linearLayoutItem: LinearLayout
 
         fun bind(objectEntity: ObjectEntity) {
-            imageView = itemView.findViewById(R.id.imageViewItem)
-            textView = itemView.findViewById(R.id.textViewItem)
-            textViewTwo = itemView.findViewById(R.id.textViewItem2)
+            textView1 = itemView.findViewById(R.id.textViewItem)
+            textView2 = itemView.findViewById(R.id.textViewItem2)
+            textView3 = itemView.findViewById(R.id.textViewItem3)
             linearLayoutItem = itemView.findViewById(R.id.linearLayoutItem)
 
-            textView.text = objectEntity.name
-            textViewTwo.text = objectEntity.comment
+            textView1.text = objectEntity.id.toString()
+            textView2.text = objectEntity.name
+            textView3.text = objectEntity.comment
 
             linearLayoutItem.setOnClickListener {
                 itemClick(objectEntity)
