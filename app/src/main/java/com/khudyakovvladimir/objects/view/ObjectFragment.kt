@@ -21,7 +21,9 @@ import javax.inject.Inject
 
 class ObjectFragment: Fragment() {
 
-    lateinit var button: Button
+    lateinit var buttonAdd: Button
+    lateinit var buttonSave: Button
+    lateinit var buttonDelete: Button
     lateinit var editTextView1: EditText
     lateinit var editTextView2: EditText
     lateinit var editTextView3: EditText
@@ -54,8 +56,7 @@ class ObjectFragment: Fragment() {
 
         initViews(view)
 
-        button = view.findViewById(R.id.button)
-        button.setOnClickListener {
+        buttonAdd.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
 
                 val list = objectViewModel.getListObjectAsList()
@@ -63,11 +64,51 @@ class ObjectFragment: Fragment() {
                 val lastObject = list?.get(size - 1)
                 val lastObjectId = lastObject?.id
                 val newObjectId = lastObjectId!! + 1
-                val id = newObjectId
+                val newID = newObjectId
 
                 objectViewModel.objectDao.insertObjectEntity(
                     ObjectEntity(
-                        id,
+                        newID,
+                        editTextView1.text.toString(),
+                        editTextView2.text.toString(),
+                        editTextView3.text.toString(),
+                        editTextView4.text.toString(),
+                        editTextView5.text.toString(),
+                        editTextView6.text.toString(),
+                        "icon"
+                    ))
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    findNavController().navigate(R.id.listFragment)
+                }
+            }
+        }
+
+        buttonSave.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                objectViewModel.objectDao.insertObjectEntity(
+                    ObjectEntity(
+                        id!!,
+                        editTextView1.text.toString(),
+                        editTextView2.text.toString(),
+                        editTextView3.text.toString(),
+                        editTextView4.text.toString(),
+                        editTextView5.text.toString(),
+                        editTextView6.text.toString(),
+                        "icon"
+                    ))
+
+                CoroutineScope(Dispatchers.Main).launch {
+                    findNavController().navigate(R.id.listFragment)
+                }
+            }
+        }
+
+        buttonDelete.setOnClickListener {
+            CoroutineScope(Dispatchers.IO).launch {
+                objectViewModel.objectDao.deleteObjectEntity(
+                    ObjectEntity(
+                        id!!,
                         editTextView1.text.toString(),
                         editTextView2.text.toString(),
                         editTextView3.text.toString(),
@@ -96,8 +137,7 @@ class ObjectFragment: Fragment() {
             )
             CoroutineScope(Dispatchers.IO).launch {
                 var tempObject1 = async {
-                    //var id = arguments?.getInt("objectID",0)
-                    objectViewModel.objectDao.getObjectById(id!!)
+                    objectViewModel.objectDao.getObjectById(id)
                 }
                 var objectT = tempObject1.await()
                 Log.d("TAG", "AWAIT - objectT.name = ${objectT.name}")
@@ -115,15 +155,10 @@ class ObjectFragment: Fragment() {
 
     }
 
-    private fun getObject(id : Int): ObjectEntity? {
-        var resultObject: ObjectEntity? = null
-        runBlocking {
-            resultObject = objectViewModel.objectDao.getObjectById(id)
-        }
-        return resultObject
-    }
-
     private fun initViews(view: View) {
+        buttonAdd = view.findViewById(R.id.buttonAdd)
+        buttonSave = view.findViewById(R.id.buttonSave)
+        buttonDelete = view.findViewById(R.id.buttonDelete)
         editTextView1 = view.findViewById(R.id.editText1)
         editTextView2 = view.findViewById(R.id.editText2)
         editTextView3 = view.findViewById(R.id.editText3)
