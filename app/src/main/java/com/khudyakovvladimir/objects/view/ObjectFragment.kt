@@ -59,24 +59,10 @@ class ObjectFragment: Fragment() {
         buttonAdd.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
 
-                val list = objectViewModel.getListObjectAsList()
-                val size = list?.size
-                val lastObject = list?.get(size - 1)
-                val lastObjectId = lastObject?.id
-                val newObjectId = lastObjectId!! + 1
-                val newID = newObjectId
+                val newID = generateNewID()
 
                 objectViewModel.objectDao.insertObjectEntity(
-                    ObjectEntity(
-                        newID,
-                        editTextView1.text.toString(),
-                        editTextView2.text.toString(),
-                        editTextView3.text.toString(),
-                        editTextView4.text.toString(),
-                        editTextView5.text.toString(),
-                        editTextView6.text.toString(),
-                        "icon"
-                    ))
+                    generateNewObject(newID))
 
                 CoroutineScope(Dispatchers.Main).launch {
                     findNavController().navigate(R.id.listFragment)
@@ -86,17 +72,11 @@ class ObjectFragment: Fragment() {
 
         buttonSave.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
+                if(id == null) {
+                    id = generateNewID()
+                }
                 objectViewModel.objectDao.insertObjectEntity(
-                    ObjectEntity(
-                        id!!,
-                        editTextView1.text.toString(),
-                        editTextView2.text.toString(),
-                        editTextView3.text.toString(),
-                        editTextView4.text.toString(),
-                        editTextView5.text.toString(),
-                        editTextView6.text.toString(),
-                        "icon"
-                    ))
+                    generateNewObject(id!!))
 
                 CoroutineScope(Dispatchers.Main).launch {
                     findNavController().navigate(R.id.listFragment)
@@ -107,16 +87,7 @@ class ObjectFragment: Fragment() {
         buttonDelete.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 objectViewModel.objectDao.deleteObjectEntity(
-                    ObjectEntity(
-                        id!!,
-                        editTextView1.text.toString(),
-                        editTextView2.text.toString(),
-                        editTextView3.text.toString(),
-                        editTextView4.text.toString(),
-                        editTextView5.text.toString(),
-                        editTextView6.text.toString(),
-                        "icon"
-                    ))
+                    generateNewObject(id!!))
 
                 CoroutineScope(Dispatchers.Main).launch {
                     findNavController().navigate(R.id.listFragment)
@@ -137,7 +108,7 @@ class ObjectFragment: Fragment() {
             )
             CoroutineScope(Dispatchers.IO).launch {
                 var tempObject1 = async {
-                    objectViewModel.objectDao.getObjectById(id)
+                    objectViewModel.objectDao.getObjectById(id!!)
                 }
                 var objectT = tempObject1.await()
                 Log.d("TAG", "AWAIT - objectT.name = ${objectT.name}")
@@ -165,5 +136,26 @@ class ObjectFragment: Fragment() {
         editTextView4 = view.findViewById(R.id.editText4)
         editTextView5 = view.findViewById(R.id.editText5)
         editTextView6 = view.findViewById(R.id.editText6)
+    }
+
+    private fun generateNewID(): Int {
+        val list = objectViewModel.getListObjectAsList()
+        val size = list.size
+        val lastObject = list[size - 1]
+        val lastObjectId = lastObject.id
+        return lastObjectId!! + 1
+    }
+
+    private fun generateNewObject(id: Int): ObjectEntity {
+        return ObjectEntity(
+            id,
+            editTextView1.text.toString(),
+            editTextView2.text.toString(),
+            editTextView3.text.toString(),
+            editTextView4.text.toString(),
+            editTextView5.text.toString(),
+            editTextView6.text.toString(),
+            "icon"
+        )
     }
 }
