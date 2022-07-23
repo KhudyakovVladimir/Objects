@@ -16,10 +16,7 @@ import com.khudyakovvladimir.objects.application.appComponent
 import com.khudyakovvladimir.objects.database.ObjectEntity
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModel
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class ObjectFragment: Fragment() {
@@ -55,12 +52,7 @@ class ObjectFragment: Fragment() {
         objectViewModelFactory = factory.createObjectViewModelFactory(activity!!.application)
         objectViewModel = ViewModelProvider(this, objectViewModelFactory).get(ObjectViewModel::class.java)
 
-        editTextView1 = view.findViewById(R.id.editText1)
-        editTextView2 = view.findViewById(R.id.editText2)
-        editTextView3 = view.findViewById(R.id.editText3)
-        editTextView4 = view.findViewById(R.id.editText4)
-        editTextView5 = view.findViewById(R.id.editText5)
-        editTextView6 = view.findViewById(R.id.editText6)
+        initViews(view)
 
         button = view.findViewById(R.id.button)
         button.setOnClickListener {
@@ -68,7 +60,7 @@ class ObjectFragment: Fragment() {
 
                 val list = objectViewModel.getListObjectAsList()
                 val size = list?.size
-                val lastObject = list?.get(size!! - 1)
+                val lastObject = list?.get(size - 1)
                 val lastObjectId = lastObject?.id
                 val newObjectId = lastObjectId!! + 1
                 val id = newObjectId
@@ -89,44 +81,10 @@ class ObjectFragment: Fragment() {
                     findNavController().navigate(R.id.listFragment)
                 }
             }
+        }
 
-            CoroutineScope(Dispatchers.IO).launch {
-                val v = getObject(2)
-                if (v != null) {
-                    Log.d("TAG", "v = ${v.name}")
-                }
-            }
 
-//            if(id != null) {
-//                var tempObject = ObjectEntity(1,
-//                    "Object",
-//                    "type",
-//                    "status",
-//                    "duty",
-//                    "coordinates",
-//                    "comment",
-//                    "icon"
-//                )
-//                CoroutineScope(Dispatchers.IO).launch {
-//                    var tempObject1 = async {
-//                        //var id = arguments?.getInt("objectID",0)
-//                        objectViewModel.objectDao.getObjectById(id!!)
-//                    }
-//                    var objectT = tempObject1.await()
-//                    Log.d("TAG", "AWAIT - objectT.name = ${objectT.name}")
-//
-//                    CoroutineScope(Dispatchers.Main).launch {
-//                        editTextView1.setText(objectT.name)
-//                        editTextView2.setText(objectT.status)
-//                        editTextView3.setText(objectT.duty)
-//                        editTextView4.setText(objectT.type)
-//                        editTextView5.setText(objectT.comment)
-//                        editTextView6.setText(objectT.icon)
-//                    }
-//
-//                }
-//            }
-
+        if(id != null) {
             var tempObject = ObjectEntity(1,
                 "Object",
                 "type",
@@ -137,24 +95,40 @@ class ObjectFragment: Fragment() {
                 "icon"
             )
             CoroutineScope(Dispatchers.IO).launch {
-                tempObject = getObject(id!!)!!
-
-                Log.d("TAG", "tempObject = ${tempObject.name}")
+                var tempObject1 = async {
+                    //var id = arguments?.getInt("objectID",0)
+                    objectViewModel.objectDao.getObjectById(id!!)
+                }
+                var objectT = tempObject1.await()
+                Log.d("TAG", "AWAIT - objectT.name = ${objectT.name}")
 
                 CoroutineScope(Dispatchers.Main).launch {
-                    editTextView1.setText(tempObject.name)
-                    editTextView2.setText(tempObject.duty)
+                    editTextView1.setText(objectT.name)
+                    editTextView2.setText(objectT.status)
+                    editTextView3.setText(objectT.duty)
+                    editTextView4.setText(objectT.type)
+                    editTextView5.setText(objectT.comment)
+                    editTextView6.setText(objectT.icon)
                 }
-
-            }
+             }
         }
+
     }
 
-    fun getObject(id : Int): ObjectEntity? {
+    private fun getObject(id : Int): ObjectEntity? {
         var resultObject: ObjectEntity? = null
         runBlocking {
             resultObject = objectViewModel.objectDao.getObjectById(id)
         }
         return resultObject
+    }
+
+    private fun initViews(view: View) {
+        editTextView1 = view.findViewById(R.id.editText1)
+        editTextView2 = view.findViewById(R.id.editText2)
+        editTextView3 = view.findViewById(R.id.editText3)
+        editTextView4 = view.findViewById(R.id.editText4)
+        editTextView5 = view.findViewById(R.id.editText5)
+        editTextView6 = view.findViewById(R.id.editText6)
     }
 }
