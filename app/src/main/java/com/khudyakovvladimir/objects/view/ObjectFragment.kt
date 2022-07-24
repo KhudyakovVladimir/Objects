@@ -2,11 +2,13 @@ package com.khudyakovvladimir.objects.view
 
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.CheckBox
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -23,13 +25,14 @@ class ObjectFragment: Fragment() {
 
     lateinit var buttonAdd: Button
     lateinit var buttonSave: Button
+    lateinit var checkBox: CheckBox
     lateinit var buttonDelete: Button
-    lateinit var editTextView1: EditText
-    lateinit var editTextView2: EditText
-    lateinit var editTextView3: EditText
-    lateinit var editTextView4: EditText
-    lateinit var editTextView5: EditText
-    lateinit var editTextView6: EditText
+    lateinit var editTextTitle: EditText
+    lateinit var editTextStatus: EditText
+    lateinit var editTextDuty: EditText
+    lateinit var editTextType: EditText
+    lateinit var editTextCoordinates: EditText
+    lateinit var editTextComment: EditText
 
     @Inject
     lateinit var factory: ObjectViewModelFactory.Factory
@@ -75,8 +78,15 @@ class ObjectFragment: Fragment() {
                 if(id == null) {
                     id = generateNewID()
                 }
+
+                var v = "false"
+                if (checkBox.isChecked) { v = "true" }
+                if (!checkBox.isChecked) { v = "false"}
+
                 objectViewModel.objectDao.insertObjectEntity(
-                    generateNewObject(id!!))
+                    //generateNewObject(id!!))
+                    generateNewObjectWithCheckbox(id!!, v)
+                )
 
                 CoroutineScope(Dispatchers.Main).launch {
                     findNavController().navigate(R.id.listFragment)
@@ -87,7 +97,9 @@ class ObjectFragment: Fragment() {
         buttonDelete.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
                 objectViewModel.objectDao.deleteObjectEntity(
-                    generateNewObject(id!!))
+                    //generateNewObject(id!!))
+                    generateNewObject(id!!)
+                )
 
                 CoroutineScope(Dispatchers.Main).launch {
                     findNavController().navigate(R.id.listFragment)
@@ -95,6 +107,24 @@ class ObjectFragment: Fragment() {
             }
         }
 
+        checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+            CoroutineScope(Dispatchers.IO).launch {
+
+                if(id == null) {
+                    id = generateNewID()
+                }
+
+                if(isChecked) {
+                    Log.d("TAG", "CHECKBOX - is checked !")
+                    objectViewModel.objectDao.insertObjectEntity(
+                        generateNewObjectWithCheckbox(id!!, "true"))
+                }else {
+                    Log.d("TAG", "CHECKBOX - is NOT checked !")
+                    objectViewModel.objectDao.insertObjectEntity(
+                        generateNewObjectWithCheckbox(id!!, "false"))
+                }
+            }
+        }
 
         if(id != null) {
             var tempObject = ObjectEntity(1,
@@ -111,15 +141,24 @@ class ObjectFragment: Fragment() {
                     objectViewModel.objectDao.getObjectById(id!!)
                 }
                 var objectT = tempObject1.await()
-                Log.d("TAG", "AWAIT - objectT.name = ${objectT.name}")
+                Log.d("TAG", "AWAIT - objectT.name = ${objectT.title}")
 
                 CoroutineScope(Dispatchers.Main).launch {
-                    editTextView1.setText(objectT.name)
-                    editTextView2.setText(objectT.status)
-                    editTextView3.setText(objectT.duty)
-                    editTextView4.setText(objectT.type)
-                    editTextView5.setText(objectT.comment)
-                    editTextView6.setText(objectT.icon)
+                    editTextTitle.setText(objectT.title)
+                    editTextStatus.setText(objectT.status)
+                    editTextDuty.setText(objectT.duty)
+                    editTextType.setText(objectT.type)
+                    editTextCoordinates.setText(objectT.coordinates)
+                    editTextComment.setText(objectT.comment)
+
+                    if (objectT.status == "true") {
+                        checkBox.isChecked = true
+                        Log.d("TAG", "TRUE")
+                    }
+                    if (objectT.status == "false") {
+                        checkBox.isChecked = false
+                        Log.d("TAG", "FALSE")
+                    }
                 }
              }
         }
@@ -130,12 +169,16 @@ class ObjectFragment: Fragment() {
         buttonAdd = view.findViewById(R.id.buttonAdd)
         buttonSave = view.findViewById(R.id.buttonSave)
         buttonDelete = view.findViewById(R.id.buttonDelete)
-        editTextView1 = view.findViewById(R.id.editText1)
-        editTextView2 = view.findViewById(R.id.editText2)
-        editTextView3 = view.findViewById(R.id.editText3)
-        editTextView4 = view.findViewById(R.id.editText4)
-        editTextView5 = view.findViewById(R.id.editText5)
-        editTextView6 = view.findViewById(R.id.editText6)
+        checkBox = view.findViewById(R.id.checkBox)
+        editTextTitle = view.findViewById(R.id.editTextTitle)
+        editTextStatus = view.findViewById(R.id.editTextStatus)
+        editTextDuty = view.findViewById(R.id.editTextDuty)
+        editTextType = view.findViewById(R.id.editTextType)
+        editTextCoordinates = view.findViewById(R.id.editTextCoordinates)
+        editTextComment = view.findViewById(R.id.editTextComment)
+
+        val list = listOf(editTextTitle, editTextStatus, editTextDuty, editTextType, editTextCoordinates, editTextComment)
+        setInputTypeForEditText(list)
     }
 
     private fun generateNewID(): Int {
@@ -149,13 +192,33 @@ class ObjectFragment: Fragment() {
     private fun generateNewObject(id: Int): ObjectEntity {
         return ObjectEntity(
             id,
-            editTextView1.text.toString(),
-            editTextView2.text.toString(),
-            editTextView3.text.toString(),
-            editTextView4.text.toString(),
-            editTextView5.text.toString(),
-            editTextView6.text.toString(),
+            editTextTitle.text.toString(),
+            editTextStatus.text.toString(),
+            editTextDuty.text.toString(),
+            editTextType.text.toString(),
+            editTextCoordinates.text.toString(),
+            editTextComment.text.toString(),
             "icon"
         )
+    }
+
+    private fun generateNewObjectWithCheckbox(id: Int, isChecked: String): ObjectEntity {
+        return ObjectEntity(
+            id,
+            editTextTitle.text.toString(),
+            editTextType.text.toString(),
+            isChecked,
+            editTextDuty.text.toString(),
+            editTextCoordinates.text.toString(),
+            editTextComment.text.toString(),
+            "icon"
+        )
+    }
+
+    private fun setInputTypeForEditText(list: List<EditText>) {
+        for (editText in list) {
+            editText.inputType = InputType.TYPE_TEXT_FLAG_MULTI_LINE
+            editText.inputType = InputType.TYPE_CLASS_TEXT or InputType.TYPE_TEXT_FLAG_MULTI_LINE
+        }
     }
 }

@@ -11,7 +11,7 @@ data class ObjectEntity(
     var id: Int,
 
     @ColumnInfo(name = "title", typeAffinity = ColumnInfo.TEXT)
-    var name: String,
+    var title: String,
 
     @ColumnInfo(name = "type", typeAffinity = ColumnInfo.TEXT)
     var type: String,
