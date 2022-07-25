@@ -71,6 +71,7 @@
             app:layout_constraintHorizontal_bias="0.0"/>
     <Button
             android:text="Add"
+            android:enabled="false"
             android:backgroundTint="#D6D6D6"
             android:layout_width="116dp"
             android:layout_height="59dp"
@@ -83,6 +84,7 @@
             app:layout_constraintEnd_toStartOf="@+id/buttonSave"/>
     <Button
             android:text="Delete"
+            android:enabled="false"
             android:backgroundTint="#FA8383"
             android:layout_width="116dp"
             android:layout_height="59dp"
@@ -96,6 +98,7 @@
             app:layout_constraintEnd_toEndOf="parent"/>
     <Button
             android:text="Save"
+            android:enabled="false"
             android:backgroundTint="#D6D6D6"
             android:layout_width="116dp"
             android:layout_height="59dp"
@@ -135,5 +138,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="@+id/editTextTitle"
             app:layout_constraintVertical_bias="0.475"/>
+    <Button
+            android:text="&#65049;"
+            android:textColor="@color/black"
+            android:backgroundTint="#B1B1B1"
+            android:layout_width="48dp"
+            android:layout_height="51dp"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:id="@+id/buttonOptions"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.95"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

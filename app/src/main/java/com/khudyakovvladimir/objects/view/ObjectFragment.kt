@@ -1,6 +1,7 @@
 package com.khudyakovvladimir.objects.view
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -25,6 +26,7 @@ class ObjectFragment: Fragment() {
 
     lateinit var buttonAdd: Button
     lateinit var buttonSave: Button
+    lateinit var buttonOptions: Button
     lateinit var checkBox: CheckBox
     lateinit var buttonDelete: Button
     lateinit var editTextTitle: EditText
@@ -107,6 +109,16 @@ class ObjectFragment: Fragment() {
             }
         }
 
+        buttonOptions.setOnClickListener {
+            buttonAdd.setBackgroundColor(Color.GRAY)
+            buttonSave.setBackgroundColor(Color.GRAY)
+            buttonDelete.setBackgroundColor(Color.RED)
+
+            buttonAdd.setEnabled(true)
+            buttonSave.setEnabled(true)
+            buttonDelete.setEnabled(true)
+        }
+
         checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
             CoroutineScope(Dispatchers.IO).launch {
 
@@ -168,6 +180,7 @@ class ObjectFragment: Fragment() {
     private fun initViews(view: View) {
         buttonAdd = view.findViewById(R.id.buttonAdd)
         buttonSave = view.findViewById(R.id.buttonSave)
+        buttonOptions = view.findViewById(R.id.buttonOptions)
         buttonDelete = view.findViewById(R.id.buttonDelete)
         checkBox = view.findViewById(R.id.checkBox)
         editTextTitle = view.findViewById(R.id.editTextTitle)
