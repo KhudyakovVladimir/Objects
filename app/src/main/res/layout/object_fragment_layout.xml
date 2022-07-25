@@ -2,7 +2,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
+        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     <EditText
@@ -83,7 +83,7 @@
             app:layout_constraintEnd_toStartOf="@+id/buttonSave"/>
     <Button
             android:text="Delete"
-            android:backgroundTint="#D6D6D6"
+            android:backgroundTint="#FA8383"
             android:layout_width="116dp"
             android:layout_height="59dp"
             android:id="@+id/buttonDelete"
@@ -92,7 +92,8 @@
             app:layout_constraintVertical_bias="0.32"
             app:layout_constraintTop_toTopOf="@+id/buttonSave"
             app:layout_constraintStart_toEndOf="@+id/buttonSave"
-            app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintEnd_toEndOf="parent"/>
     <Button
             android:text="Save"
             android:backgroundTint="#D6D6D6"
@@ -118,15 +119,21 @@
             app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginTop="20dp"
             app:layout_constraintHorizontal_bias="0.0"/>
-    <Button
+    <com.google.android.material.button.MaterialButton
             android:text="Map"
             android:textSize="10sp"
+            app:strokeColor="#FF5C5C"
+            app:strokeWidth="1dp"
             android:textColor="@color/black"
             android:layout_width="70dp"
             android:layout_height="85dp"
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/buttonMap"
-            app:layout_constraintTop_toTopOf="@+id/editTextCoordinates"
-            app:layout_constraintStart_toEndOf="@+id/editTextCoordinates" app:layout_constraintHorizontal_bias="0.666"/>
+            app:layout_constraintStart_toEndOf="@+id/editTextCoordinates"
+            app:layout_constraintHorizontal_bias="0.666"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/editTextTitle"
+            app:layout_constraintVertical_bias="0.475"/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
