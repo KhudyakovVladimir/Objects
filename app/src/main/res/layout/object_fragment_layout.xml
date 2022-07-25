@@ -2,10 +2,14 @@
 <androidx.constraintlayout.widget.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent">
 
     <EditText
+            android:textSize="30dp"
+            android:background="#B1B1B1"
+            android:gravity="center"
+            android:textColor="#FF0000"
             android:inputType="textPersonName"
             android:autofillHints="Object"
             android:hint="Title"
@@ -57,6 +61,7 @@
             android:inputType="textPersonName"
             android:autofillHints="Comment"
             android:hint="Comment"
+            android:gravity="start|top"
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:id="@+id/editTextComment"
@@ -66,6 +71,7 @@
             app:layout_constraintHorizontal_bias="0.0"/>
     <Button
             android:text="Add"
+            android:backgroundTint="#D6D6D6"
             android:layout_width="116dp"
             android:layout_height="59dp"
             android:id="@+id/buttonAdd"
@@ -77,6 +83,7 @@
             app:layout_constraintEnd_toStartOf="@+id/buttonSave"/>
     <Button
             android:text="Delete"
+            android:backgroundTint="#D6D6D6"
             android:layout_width="116dp"
             android:layout_height="59dp"
             android:id="@+id/buttonDelete"
@@ -88,6 +95,7 @@
             app:layout_constraintHorizontal_bias="0.5" app:layout_constraintEnd_toEndOf="parent"/>
     <Button
             android:text="Save"
+            android:backgroundTint="#D6D6D6"
             android:layout_width="116dp"
             android:layout_height="59dp"
             android:id="@+id/buttonSave"
@@ -95,9 +103,11 @@
             android:textColor="@color/black"
             app:layout_constraintVertical_bias="0.36"
             app:layout_constraintTop_toTopOf="@+id/buttonAdd"
-            app:layout_constraintStart_toEndOf="@+id/buttonAdd" app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/buttonAdd"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintEnd_toStartOf="@+id/buttonDelete"/>
     <CheckBox
+            app:buttonTint="#FB0505"
             android:text=""
             android:gravity="center"
             android:layout_width="wrap_content"
