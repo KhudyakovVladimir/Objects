@@ -47,18 +47,79 @@ class ObjectAdapter(
         }
     }
 
+    //Holder false
+    inner class ObjectViewHolder2(itemView: View): RecyclerView.ViewHolder(itemView) {
+        lateinit var textView1: TextView
+        lateinit var textView2: TextView
+        lateinit var textView3: TextView
+        lateinit var linearLayoutItem: LinearLayout
+
+        fun bind(objectEntity: ObjectEntity) {
+            textView1 = itemView.findViewById(R.id.textViewItem)
+            textView2 = itemView.findViewById(R.id.textViewItem2)
+            textView3 = itemView.findViewById(R.id.textViewItem3)
+            linearLayoutItem = itemView.findViewById(R.id.linearLayoutItem)
+
+            textView1.text = objectEntity.id.toString()
+            textView2.text = objectEntity.title
+
+            if (objectEntity.status == "true") {
+                textView3.text = "+"
+                textView3.setTextColor(Color.RED)
+            }else {
+                textView3.text = "-"
+            }
+
+            //textView3.text = objectEntity.status
+
+            linearLayoutItem.setOnClickListener {
+                itemClick(objectEntity)
+            }
+        }
+    }
+
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
-        return ObjectViewHolder(view)
+//        val view = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
+//        return ObjectViewHolder(view)
+        val view:View?
+        val viewHolder: RecyclerView.ViewHolder?
+
+        if(viewType == 0) {
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
+            viewHolder = ObjectViewHolder(view)
+        }else {
+            view = LayoutInflater.from(parent.context).inflate(R.layout.item_two, parent, false)
+            viewHolder = ObjectViewHolder2(view)
+        }
+
+        return viewHolder
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        val holderR = holder as ObjectViewHolder
-        holderR.bind(list[position])
+//        val holderR = holder as ObjectViewHolder
+//        holderR.bind(list[position])
+        when(holder.itemViewType) {
+            0 -> {
+                val objectHolder = holder as ObjectViewHolder
+                objectHolder.bind(list[position])
+            }
+            1 -> {
+                val objectHolder = holder as ObjectViewHolder2
+                objectHolder.bind(list[position])
+            }
+        }
     }
 
     override fun getItemCount(): Int {
         return list.size
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when(list[position].status) {
+            "true" -> { 1 }
+            else -> { 0 }
+        }
     }
 
     fun updateAdapter(_listNews: List<ObjectEntity>) {
