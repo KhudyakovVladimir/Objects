@@ -1,7 +1,9 @@
 package com.khudyakovvladimir.objects.view
 
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
 import android.util.Log
@@ -19,14 +21,19 @@ import com.khudyakovvladimir.objects.application.appComponent
 import com.khudyakovvladimir.objects.database.ObjectEntity
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModel
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModelFactory
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 class ObjectFragment: Fragment() {
 
     lateinit var buttonAdd: Button
     lateinit var buttonSave: Button
     lateinit var buttonOptions: Button
+    lateinit var buttonMap: Button
     lateinit var checkBox: CheckBox
     lateinit var buttonDelete: Button
     lateinit var editTextTitle: EditText
@@ -35,6 +42,8 @@ class ObjectFragment: Fragment() {
     lateinit var editTextType: EditText
     lateinit var editTextCoordinates: EditText
     lateinit var editTextComment: EditText
+
+    lateinit var objectT: ObjectEntity
 
     @Inject
     lateinit var factory: ObjectViewModelFactory.Factory
@@ -119,6 +128,36 @@ class ObjectFragment: Fragment() {
             buttonDelete.setEnabled(true)
         }
 
+        buttonMap.setOnClickListener {
+            //YANDEX NAVIGATOR
+//            //val uri = Uri.parse("yandexnavi://build_route_on_map?lat_to=53.247472&lon_to=34.357006")
+//            //val intent = Intent(Intent.ACTION_VIEW, uri)
+//            val intent = Intent("ru.yandex.yandexnavi.action.SHOW_POINT_ON_MAP")
+//            //val intent = Intent(Intent.ACTION_VIEW)
+//            intent.setPackage("ru.yandex.yandexnavi")
+//
+//            intent.putExtra("lat", 55.758192)
+//            intent.putExtra("lon", 37.642817)
+//
+//            startActivity(intent)
+//            //школа №2
+//            //53.24507170080914, 34.35609038896057
+//            //ивушка
+//        //53.247472, 34.357006
+
+            //2GIS
+//            val longitude = objectT.longitude
+//            val latitude = objectT.latitude
+//            val geoUriString = "geo:${longitude},${latitude}?z=15"
+
+            val geoUriString = "geo:53.245071,34.356090?z=15"
+            val geoUri: Uri = Uri.parse(geoUriString)
+            val mapIntent = Intent(Intent.ACTION_VIEW, geoUri)
+
+            startActivity(mapIntent)
+
+        }
+
         checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
             CoroutineScope(Dispatchers.IO).launch {
 
@@ -152,7 +191,8 @@ class ObjectFragment: Fragment() {
                 var tempObject1 = async {
                     objectViewModel.objectDao.getObjectById(id!!)
                 }
-                var objectT = tempObject1.await()
+                //var objectT = tempObject1.await()
+                objectT = tempObject1.await()
                 Log.d("TAG", "AWAIT - objectT.name = ${objectT.title}")
 
                 CoroutineScope(Dispatchers.Main).launch {
@@ -182,6 +222,7 @@ class ObjectFragment: Fragment() {
         buttonSave = view.findViewById(R.id.buttonSave)
         buttonOptions = view.findViewById(R.id.buttonOptions)
         buttonDelete = view.findViewById(R.id.buttonDelete)
+        buttonMap = view.findViewById(R.id.buttonMap)
         checkBox = view.findViewById(R.id.checkBox)
         editTextTitle = view.findViewById(R.id.editTextTitle)
         editTextStatus = view.findViewById(R.id.editTextStatus)
