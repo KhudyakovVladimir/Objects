@@ -23,11 +23,17 @@ data class ObjectEntity(
     var duty: String,
 
     @ColumnInfo(name = "coordinates", typeAffinity = ColumnInfo.TEXT)
-    var coordinates: String,
+    var address: String,
 
     @ColumnInfo(name = "comment", typeAffinity = ColumnInfo.TEXT)
     var comment: String,
 
     @ColumnInfo(name = "icon", typeAffinity = ColumnInfo.TEXT)
     var icon: String,
+
+    @ColumnInfo(name = "longitude", typeAffinity = ColumnInfo.TEXT)
+    var longitude: String,
+
+    @ColumnInfo(name = "latitude", typeAffinity = ColumnInfo.TEXT)
+    var latitude: String,
 )

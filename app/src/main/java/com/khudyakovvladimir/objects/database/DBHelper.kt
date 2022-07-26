@@ -22,13 +22,15 @@ class DBHelper(private val context: Context) {
             CoroutineScope(Dispatchers.IO).launch {
                 objectDatabase.objectDao().insertObjectEntity(
                     ObjectEntity(1,
-                        "Object",
-                        "type",
-                        "status",
-                        "duty",
-                        "coordinates",
-                        "comment",
-                        "icon"
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
                     ))
             }
         }

@@ -42,6 +42,8 @@ class ObjectFragment: Fragment() {
     lateinit var editTextType: EditText
     lateinit var editTextCoordinates: EditText
     lateinit var editTextComment: EditText
+    lateinit var editTextLongitude: EditText
+    lateinit var editTextLatitude: EditText
 
     lateinit var objectT: ObjectEntity
 
@@ -129,28 +131,14 @@ class ObjectFragment: Fragment() {
         }
 
         buttonMap.setOnClickListener {
-            //YANDEX NAVIGATOR
-//            //val uri = Uri.parse("yandexnavi://build_route_on_map?lat_to=53.247472&lon_to=34.357006")
-//            //val intent = Intent(Intent.ACTION_VIEW, uri)
-//            val intent = Intent("ru.yandex.yandexnavi.action.SHOW_POINT_ON_MAP")
-//            //val intent = Intent(Intent.ACTION_VIEW)
-//            intent.setPackage("ru.yandex.yandexnavi")
-//
-//            intent.putExtra("lat", 55.758192)
-//            intent.putExtra("lon", 37.642817)
-//
-//            startActivity(intent)
-//            //школа №2
-//            //53.24507170080914, 34.35609038896057
-//            //ивушка
-//        //53.247472, 34.357006
-
             //2GIS
-//            val longitude = objectT.longitude
-//            val latitude = objectT.latitude
-//            val geoUriString = "geo:${longitude},${latitude}?z=15"
+            val longitude = objectT.longitude
+            val latitude = objectT.latitude
+            val geoUriString = "geo:${longitude},${latitude}?z=15"
 
-            val geoUriString = "geo:53.245071,34.356090?z=15"
+            Log.d("TAG", "GEO - longitude : ${longitude} , latitude : ${latitude} ")
+
+            //val geoUriString = "geo:53.245071,34.356090?z=15"
             val geoUri: Uri = Uri.parse(geoUriString)
             val mapIntent = Intent(Intent.ACTION_VIEW, geoUri)
 
@@ -185,7 +173,9 @@ class ObjectFragment: Fragment() {
                 "duty",
                 "coordinates",
                 "comment",
-                "icon"
+                "icon",
+                "",
+                ""
             )
             CoroutineScope(Dispatchers.IO).launch {
                 var tempObject1 = async {
@@ -200,8 +190,10 @@ class ObjectFragment: Fragment() {
                     editTextStatus.setText(objectT.status)
                     editTextDuty.setText(objectT.duty)
                     editTextType.setText(objectT.type)
-                    editTextCoordinates.setText(objectT.coordinates)
+                    editTextCoordinates.setText(objectT.address)
                     editTextComment.setText(objectT.comment)
+                    editTextLongitude.setText(objectT.longitude)
+                    editTextLatitude.setText(objectT.latitude)
 
                     if (objectT.status == "true") {
                         checkBox.isChecked = true
@@ -228,10 +220,12 @@ class ObjectFragment: Fragment() {
         editTextStatus = view.findViewById(R.id.editTextStatus)
         editTextDuty = view.findViewById(R.id.editTextDuty)
         editTextType = view.findViewById(R.id.editTextType)
-        editTextCoordinates = view.findViewById(R.id.editTextCoordinates)
+        editTextCoordinates = view.findViewById(R.id.editTextAddress)
         editTextComment = view.findViewById(R.id.editTextComment)
+        editTextLongitude = view.findViewById(R.id.editTextLongitude)
+        editTextLatitude = view.findViewById(R.id.editTextLatitude)
 
-        val list = listOf(editTextTitle, editTextStatus, editTextDuty, editTextType, editTextCoordinates, editTextComment)
+        val list = listOf(editTextTitle, editTextStatus, editTextDuty, editTextType, editTextCoordinates, editTextComment, editTextLongitude, editTextLatitude)
         setInputTypeForEditText(list)
     }
 
@@ -252,7 +246,9 @@ class ObjectFragment: Fragment() {
             editTextType.text.toString(),
             editTextCoordinates.text.toString(),
             editTextComment.text.toString(),
-            "icon"
+            "icon",
+            editTextLongitude.text.toString(),
+            editTextLatitude.text.toString()
         )
     }
 
@@ -265,7 +261,9 @@ class ObjectFragment: Fragment() {
             editTextDuty.text.toString(),
             editTextCoordinates.text.toString(),
             editTextComment.text.toString(),
-            "icon"
+            "icon",
+            editTextLongitude.text.toString(),
+            editTextLatitude.text.toString()
         )
     }
 

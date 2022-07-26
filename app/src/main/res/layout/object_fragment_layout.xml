@@ -49,26 +49,46 @@
             android:layout_marginTop="4dp"/>
     <EditText
             android:inputType="textPersonName"
-            android:autofillHints="Coordinates"
-            android:hint="Coordinates"
+            android:autofillHints="Address"
+            android:hint="Address"
             android:layout_width="320dp"
             android:layout_height="85dp"
-            android:id="@+id/editTextCoordinates"
+            android:id="@+id/editTextAddress"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="4dp"
             app:layout_constraintTop_toBottomOf="@+id/editTextType"/>
+    <EditText
+            android:inputType="textPersonName"
+            android:autofillHints="Longitude"
+            android:hint="Longitude"
+            android:layout_width="190dp"
+            android:layout_height="85dp"
+            android:id="@+id/editTextLongitude"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginStart="4dp"
+            app:layout_constraintTop_toBottomOf="@+id/editTextAddress"/>
+    <EditText
+            android:inputType="textPersonName"
+            android:autofillHints="Latitude"
+            android:hint="Latitude"
+            android:layout_width="190dp"
+            android:layout_height="85dp"
+            android:id="@+id/editTextLatitude"
+            app:layout_constraintStart_toEndOf="@+id/editTextLongitude"
+            android:layout_marginStart="8dp" app:layout_constraintTop_toBottomOf="@+id/editTextAddress"
+            app:layout_constraintEnd_toEndOf="parent"/>
     <EditText
             android:inputType="textPersonName"
             android:autofillHints="Comment"
             android:hint="Comment"
             android:gravity="start|top"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="180dp"
             android:id="@+id/editTextComment"
-            app:layout_constraintTop_toBottomOf="@+id/editTextCoordinates"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"/>
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintTop_toBottomOf="@+id/editTextLongitude"/>
     <Button
             android:text="Add"
             android:enabled="false"
@@ -133,7 +153,7 @@
             android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             android:id="@+id/buttonMap"
-            app:layout_constraintStart_toEndOf="@+id/editTextCoordinates"
+            app:layout_constraintStart_toEndOf="@+id/editTextAddress"
             app:layout_constraintHorizontal_bias="0.666"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="@+id/editTextTitle"

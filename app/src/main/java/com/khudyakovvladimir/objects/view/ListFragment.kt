@@ -74,7 +74,9 @@ class ListFragment: Fragment() {
             "duty",
             "coordinates",
             "comment",
-            "icon"
+            "icon",
+            "",
+            ""
         ))
 
         recyclerView = view.findViewById(R.id.recyclerView)
