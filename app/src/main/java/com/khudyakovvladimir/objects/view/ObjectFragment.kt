@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.CheckBox
 import android.widget.EditText
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -33,7 +34,7 @@ class ObjectFragment: Fragment() {
     lateinit var buttonAdd: Button
     lateinit var buttonSave: Button
     lateinit var buttonOptions: Button
-    lateinit var buttonMap: Button
+    lateinit var buttonMap: ImageView
     lateinit var checkBox: CheckBox
     lateinit var buttonDelete: Button
     lateinit var editTextTitle: EditText

@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.khudyakovvladimir.objects">
+          xmlns:tools="http://schemas.android.com/tools" package="com.khudyakovvladimir.objects">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+                     android:maxSdkVersion="29"
+                     tools:ignore="ScopedStorage"
+    />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+                     tools:ignore="ScopedStorage"/>
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <permission android:name="android.permission.QUERY_ALL_PACKAGES" />
 
     <application
             android:name=".application.MyApplication"
@@ -11,6 +26,7 @@
             android:supportsRtl="true"
             android:theme="@style/Theme.Objects">
         <activity
+                android:screenOrientation="portrait"
                 android:exported="true"
                 android:theme="@style/Theme.Objects.Launcher"
                 android:name=".view.MainActivity">
