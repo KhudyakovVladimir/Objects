@@ -14,7 +14,7 @@ data class ObjectEntity(
     var title: String,
 
     @ColumnInfo(name = "type", typeAffinity = ColumnInfo.TEXT)
-    var type: String,
+    var nearest: String,
 
     @ColumnInfo(name = "status", typeAffinity = ColumnInfo.TEXT)
     var status: String,

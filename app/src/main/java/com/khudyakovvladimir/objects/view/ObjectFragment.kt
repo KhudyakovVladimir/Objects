@@ -34,19 +34,22 @@ class ObjectFragment: Fragment() {
     lateinit var buttonAdd: Button
     lateinit var buttonSave: Button
     lateinit var buttonOptions: Button
-    lateinit var buttonMap: ImageView
-    lateinit var checkBox: CheckBox
     lateinit var buttonDelete: Button
+    lateinit var buttonMap: ImageView
+
+    lateinit var checkBoxStatus: CheckBox
+    lateinit var checkBoxDuty: CheckBox
+
     lateinit var editTextTitle: EditText
     lateinit var editTextStatus: EditText
     lateinit var editTextDuty: EditText
-    lateinit var editTextType: EditText
+    lateinit var editTextNearest: EditText
     lateinit var editTextCoordinates: EditText
     lateinit var editTextComment: EditText
     lateinit var editTextLongitude: EditText
     lateinit var editTextLatitude: EditText
 
-    lateinit var objectT: ObjectEntity
+    lateinit var objectEntity: ObjectEntity
 
     @Inject
     lateinit var factory: ObjectViewModelFactory.Factory
@@ -94,8 +97,8 @@ class ObjectFragment: Fragment() {
                 }
 
                 var v = "false"
-                if (checkBox.isChecked) { v = "true" }
-                if (!checkBox.isChecked) { v = "false"}
+                if (checkBoxStatus.isChecked) { v = "true" }
+                if (!checkBoxStatus.isChecked) { v = "false"}
 
                 objectViewModel.objectDao.insertObjectEntity(
                     //generateNewObject(id!!))
@@ -133,8 +136,8 @@ class ObjectFragment: Fragment() {
 
         buttonMap.setOnClickListener {
             //2GIS
-            val longitude = objectT.longitude
-            val latitude = objectT.latitude
+            val longitude = objectEntity.longitude
+            val latitude = objectEntity.latitude
             val geoUriString = "geo:${longitude},${latitude}?z=15"
 
             Log.d("TAG", "GEO - longitude : ${longitude} , latitude : ${latitude} ")
@@ -147,7 +150,7 @@ class ObjectFragment: Fragment() {
 
         }
 
-        checkBox.setOnCheckedChangeListener { buttonView, isChecked ->
+        checkBoxStatus.setOnCheckedChangeListener { buttonView, isChecked ->
             CoroutineScope(Dispatchers.IO).launch {
 
                 if(id == null) {
@@ -183,25 +186,25 @@ class ObjectFragment: Fragment() {
                     objectViewModel.objectDao.getObjectById(id!!)
                 }
                 //var objectT = tempObject1.await()
-                objectT = tempObject1.await()
-                Log.d("TAG", "AWAIT - objectT.name = ${objectT.title}")
+                objectEntity = tempObject1.await()
+                Log.d("TAG", "AWAIT - objectT.name = ${objectEntity.title}")
 
                 CoroutineScope(Dispatchers.Main).launch {
-                    editTextTitle.setText(objectT.title)
-                    editTextStatus.setText(objectT.status)
-                    editTextDuty.setText(objectT.duty)
-                    editTextType.setText(objectT.type)
-                    editTextCoordinates.setText(objectT.address)
-                    editTextComment.setText(objectT.comment)
-                    editTextLongitude.setText(objectT.longitude)
-                    editTextLatitude.setText(objectT.latitude)
+                    editTextTitle.setText(objectEntity.title)
+                    editTextStatus.setText(objectEntity.status)
+                    editTextDuty.setText(objectEntity.duty)
+                    editTextNearest.setText(objectEntity.nearest)
+                    editTextCoordinates.setText(objectEntity.address)
+                    editTextComment.setText(objectEntity.comment)
+                    editTextLongitude.setText(objectEntity.longitude)
+                    editTextLatitude.setText(objectEntity.latitude)
 
-                    if (objectT.status == "true") {
-                        checkBox.isChecked = true
+                    if (objectEntity.status == "true") {
+                        checkBoxStatus.isChecked = true
                         Log.d("TAG", "TRUE")
                     }
-                    if (objectT.status == "false") {
-                        checkBox.isChecked = false
+                    if (objectEntity.status == "false") {
+                        checkBoxStatus.isChecked = false
                         Log.d("TAG", "FALSE")
                     }
                 }
@@ -216,17 +219,18 @@ class ObjectFragment: Fragment() {
         buttonOptions = view.findViewById(R.id.buttonOptions)
         buttonDelete = view.findViewById(R.id.buttonDelete)
         buttonMap = view.findViewById(R.id.buttonMap)
-        checkBox = view.findViewById(R.id.checkBox)
+        checkBoxStatus = view.findViewById(R.id.checkBoxStatus)
+        checkBoxDuty = view.findViewById(R.id.checkBoxDuty)
         editTextTitle = view.findViewById(R.id.editTextTitle)
         editTextStatus = view.findViewById(R.id.editTextStatus)
         editTextDuty = view.findViewById(R.id.editTextDuty)
-        editTextType = view.findViewById(R.id.editTextType)
+        editTextNearest = view.findViewById(R.id.editTextNearest)
         editTextCoordinates = view.findViewById(R.id.editTextAddress)
         editTextComment = view.findViewById(R.id.editTextComment)
         editTextLongitude = view.findViewById(R.id.editTextLongitude)
         editTextLatitude = view.findViewById(R.id.editTextLatitude)
 
-        val list = listOf(editTextTitle, editTextStatus, editTextDuty, editTextType, editTextCoordinates, editTextComment, editTextLongitude, editTextLatitude)
+        val list = listOf(editTextTitle, editTextStatus, editTextDuty, editTextNearest, editTextCoordinates, editTextComment, editTextLongitude, editTextLatitude)
         setInputTypeForEditText(list)
     }
 
@@ -244,7 +248,7 @@ class ObjectFragment: Fragment() {
             editTextTitle.text.toString(),
             editTextStatus.text.toString(),
             editTextDuty.text.toString(),
-            editTextType.text.toString(),
+            editTextNearest.text.toString(),
             editTextCoordinates.text.toString(),
             editTextComment.text.toString(),
             "icon",
@@ -257,7 +261,7 @@ class ObjectFragment: Fragment() {
         return ObjectEntity(
             id,
             editTextTitle.text.toString(),
-            editTextType.text.toString(),
+            editTextNearest.text.toString(),
             isChecked,
             editTextDuty.text.toString(),
             editTextCoordinates.text.toString(),
