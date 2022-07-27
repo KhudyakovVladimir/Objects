@@ -32,14 +32,14 @@ class ObjectAdapter(
             textView1.text = objectEntity.id.toString()
             textView2.text = objectEntity.title
 
-            if (objectEntity.status == "true") {
-                textView3.text = "+"
-                textView3.setTextColor(Color.RED)
-            }else {
-                textView3.text = "-"
-            }
+            if (objectEntity.duty != "") {
+                val unicode = 0x1F692
+                val textEmoji = String(Character.toChars(unicode))
+                textView3.text = textEmoji
 
-            //textView3.text = objectEntity.status
+            }else {
+                textView3.text = ""
+            }
 
             linearLayoutItem.setOnClickListener {
                 itemClick(objectEntity)
@@ -63,14 +63,14 @@ class ObjectAdapter(
             textView1.text = objectEntity.id.toString()
             textView2.text = objectEntity.title
 
-            if (objectEntity.status == "true") {
-                textView3.text = "+"
-                textView3.setTextColor(Color.RED)
-            }else {
-                textView3.text = "-"
-            }
+            if (objectEntity.duty != "") {
+                val unicode = 0x1F692
+                val textEmoji = String(Character.toChars(unicode))
+                textView3.text = textEmoji
 
-            //textView3.text = objectEntity.status
+            }else {
+                textView3.text = ""
+            }
 
             linearLayoutItem.setOnClickListener {
                 itemClick(objectEntity)
@@ -80,8 +80,6 @@ class ObjectAdapter(
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-//        val view = LayoutInflater.from(parent.context).inflate(R.layout.item, parent, false)
-//        return ObjectViewHolder(view)
         val view:View?
         val viewHolder: RecyclerView.ViewHolder?
 
@@ -97,8 +95,6 @@ class ObjectAdapter(
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-//        val holderR = holder as ObjectViewHolder
-//        holderR.bind(list[position])
         when(holder.itemViewType) {
             0 -> {
                 val objectHolder = holder as ObjectViewHolder
