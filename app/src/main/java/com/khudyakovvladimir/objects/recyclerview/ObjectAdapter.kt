@@ -113,7 +113,7 @@ class ObjectAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when(list[position].status) {
-            "true" -> { 1 }
+            "проверен" -> { 1 }
             else -> { 0 }
         }
     }

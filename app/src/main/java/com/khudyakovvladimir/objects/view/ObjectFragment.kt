@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -60,6 +61,17 @@ class ObjectFragment: Fragment() {
         context.appComponent.injectObjectFragment(this)
     }
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val callback: OnBackPressedCallback = object :OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().navigate(R.id.listFragment)
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.object_fragment_layout, container, false)
     }
@@ -95,13 +107,13 @@ class ObjectFragment: Fragment() {
                     id = generateNewID()
                 }
 
-                var v = "false"
-                if (checkBoxStatus.isChecked) { v = "true" }
-                if (!checkBoxStatus.isChecked) { v = "false"}
+                var isChecked = "не проверен"
+                if (checkBoxStatus.isChecked) { isChecked = "проверен" }
+                if (!checkBoxStatus.isChecked) { isChecked = "не проверен"}
 
                 objectViewModel.objectDao.insertObjectEntity(
                     //generateNewObject(id!!))
-                    generateNewObjectWithCheckbox(id!!, v)
+                    generateNewObjectWithCheckbox(id!!, isChecked)
                 )
 
                 CoroutineScope(Dispatchers.Main).launch {
@@ -140,7 +152,6 @@ class ObjectFragment: Fragment() {
 
             Log.d("TAG", "GEO - longitude : ${longitude} , latitude : ${latitude} ")
 
-            //val geoUriString = "geo:53.245071,34.356090?z=15"
             val geoUri: Uri = Uri.parse(geoUriString)
             val mapIntent = Intent(Intent.ACTION_VIEW, geoUri)
 
@@ -168,14 +179,14 @@ class ObjectFragment: Fragment() {
                 CoroutineScope(Dispatchers.IO).launch {
                     Log.d("TAG", "CHECKBOX - is checked !")
                     objectViewModel.objectDao.insertObjectEntity(
-                        generateNewObjectWithCheckbox(id!!, "true"))
+                        generateNewObjectWithCheckbox(id!!, "проверен"))
                 }
             }else {
                 makeToast("Объект не обслужен !")
                 CoroutineScope(Dispatchers.IO).launch {
                     Log.d("TAG", "CHECKBOX - is NOT checked !")
                     objectViewModel.objectDao.insertObjectEntity(
-                        generateNewObjectWithCheckbox(id!!, "false"))
+                        generateNewObjectWithCheckbox(id!!, "не проверен"))
                 }
             }
         }
@@ -188,7 +199,7 @@ class ObjectFragment: Fragment() {
                     Log.d("TAG", "CHECKBOX - is NOT checked !")
                     editTextDuty.setText("")
                     objectViewModel.objectDao.insertObjectEntity(
-                        generateNewObjectWithCheckbox(id!!, "false"))
+                        generateNewObjectWithCheckbox(id!!, "не проверен"))
                 }
             }
         }
@@ -222,11 +233,11 @@ class ObjectFragment: Fragment() {
                     editTextLongitude.setText(objectEntity.longitude)
                     editTextLatitude.setText(objectEntity.latitude)
 
-                    if (objectEntity.status == "true") {
+                    if (objectEntity.status == "проверен") {
                         checkBoxStatus.isChecked = true
                         Log.d("TAG", "TRUE")
                     }
-                    if (objectEntity.status == "false") {
+                    if (objectEntity.status == "не проверен") {
                         checkBoxStatus.isChecked = false
                         Log.d("TAG", "FALSE")
                     }
