@@ -10,14 +10,23 @@ import javax.inject.Inject
 
 class ObjectViewModel @Inject constructor(
     application: Application,
-    val objectDao: ObjectDao
+    val objectDao: ObjectDao,
+    val sortType: Int
 ): AndroidViewModel(application) {
 
+    private var listDutyObjects: LiveData<List<ObjectEntity>> = objectDao.getAllDutyObjectsAsLiveData()!!
     private var listObjects: LiveData<List<ObjectEntity>> = objectDao.getAllObjectsAsLiveData()!!
     private var objectsList: ArrayList<ObjectEntity>? = null
 
+    fun getListDutyObjects(): LiveData<List<ObjectEntity>> {
+        return listDutyObjects
+    }
+
     fun getListObjects(): LiveData<List<ObjectEntity>> {
-        return listObjects
+        if(sortType == 0) {
+            return listObjects
+        }
+        return listDutyObjects
     }
 
     fun getListObjectAsList() : List<ObjectEntity> {

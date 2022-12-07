@@ -42,4 +42,9 @@ class MainModule {
     fun provideNewsDatabase(application: Application): ObjectDatabase {
         return Room.databaseBuilder(application, ObjectDatabase::class.java, "object_db").build()
     }
+
+    @Provides
+    fun provideSortType(): Int {
+        return 0
+    }
 }

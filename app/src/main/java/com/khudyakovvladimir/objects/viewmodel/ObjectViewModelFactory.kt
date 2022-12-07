@@ -12,7 +12,8 @@ import java.lang.IllegalArgumentException
 class ObjectViewModelFactory @AssistedInject constructor(
     @Assisted("application")
     var application: Application,
-    var objectDao: ObjectDao
+    var objectDao: ObjectDao,
+    var sortType: Int
 ): ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -20,7 +21,8 @@ class ObjectViewModelFactory @AssistedInject constructor(
             @Suppress("UNCHECKED CAST")
             return ObjectViewModel(
                 application = application,
-                objectDao = objectDao
+                objectDao = objectDao,
+                sortType = sortType
             ) as T
         }
         throw IllegalArgumentException("Unable to construct ObjectViewModel")

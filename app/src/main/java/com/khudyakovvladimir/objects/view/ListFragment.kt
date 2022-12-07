@@ -27,14 +27,17 @@ class ListFragment: Fragment() {
 
     @Inject
     lateinit var factory: ObjectViewModelFactory.Factory
-    lateinit var objectViewModel: ObjectViewModel
-    lateinit var objectViewModelFactory: ObjectViewModelFactory
+    private lateinit var objectViewModel: ObjectViewModel
+    private lateinit var objectViewModelFactory: ObjectViewModelFactory
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var objectAdapter: ObjectAdapter
 
     private lateinit var fab: FloatingActionButton
     private var isDatabaseCreated = false
+    private var isSortByDuty = false
+
+    lateinit var list2: List<ObjectEntity>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -45,6 +48,10 @@ class ListFragment: Fragment() {
 
         if (sharedPreferences.contains("database")) {
             isDatabaseCreated = sharedPreferences.getBoolean("database", false)
+        }
+
+        if (sharedPreferences.contains("sortByDuty")) {
+            isSortByDuty = sharedPreferences.getBoolean("sortByDuty", false)
         }
 
         if (!isDatabaseCreated) {
@@ -58,10 +65,12 @@ class ListFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Log.d("TAG", "_______onCreateView_______")
         return inflater.inflate(R.layout.list_fragment_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        Log.d("TAG", "_______onViewCreated______")
         super.onViewCreated(view, savedInstanceState)
 
         objectViewModelFactory = factory.createObjectViewModelFactory(activity!!.application)
@@ -81,7 +90,6 @@ class ListFragment: Fragment() {
 
         recyclerView = view.findViewById(R.id.recyclerView)
         fab = view.findViewById(R.id.floatingActionButton)
-        //recyclerView.visibility = View.INVISIBLE
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
 
         val itemClick = { objectEntity: ObjectEntity -> navigateToSingleObject(objectEntity.id)}
@@ -96,11 +104,26 @@ class ListFragment: Fragment() {
         objectViewModel.getListObjects().observe(this) {
             objectAdapter.list = it
             objectAdapter.notifyDataSetChanged()
-            Log.d("TAG", "LIST = $it")
+            Log.d("TAG", "objectAdapter.list = $it")
+        }
+
+        objectViewModel.getListDutyObjects().observe(this) {
+            list2 = it
+            Log.d("TAG", "list2 = $it")
+            if(isSortByDuty) {
+                objectAdapter.list = list2
+                objectAdapter.notifyDataSetChanged()
+            }
         }
 
         fab.setOnClickListener {
-            findNavController().navigate(R.id.objectFragment)
+            objectAdapter.list = list2
+            objectAdapter.notifyDataSetChanged()
+
+            val sharedPreferences = activity?.applicationContext!!.getSharedPreferences("settings", AppCompatActivity.MODE_PRIVATE)
+            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            editor.putBoolean("sortByDuty", true)
+            editor.apply()
         }
     }
 

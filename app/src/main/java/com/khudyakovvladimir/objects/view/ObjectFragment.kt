@@ -112,7 +112,6 @@ class ObjectFragment: Fragment() {
                 if (!checkBoxStatus.isChecked) { isChecked = "не проверен"}
 
                 objectViewModel.objectDao.insertObjectEntity(
-                    //generateNewObject(id!!))
                     generateNewObjectWithCheckbox(id!!, isChecked)
                 )
 
