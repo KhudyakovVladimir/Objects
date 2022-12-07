@@ -7,6 +7,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -34,9 +36,13 @@ class ListFragment: Fragment() {
     private lateinit var objectAdapter: ObjectAdapter
 
     private lateinit var fab: FloatingActionButton
+    private lateinit var button: Button
+    private lateinit var button2: Button
+    lateinit var textView: TextView
     private var isDatabaseCreated = false
     private var isSortByDuty = false
 
+    lateinit var list1: List<ObjectEntity>
     lateinit var list2: List<ObjectEntity>
 
     override fun onAttach(context: Context) {
@@ -76,7 +82,7 @@ class ListFragment: Fragment() {
         objectViewModelFactory = factory.createObjectViewModelFactory(activity!!.application)
         objectViewModel = ViewModelProvider(this, objectViewModelFactory).get(ObjectViewModel::class.java)
 
-        val list = listOf(ObjectEntity(1,
+        var list = listOf(ObjectEntity(1,
             "Object",
             "type",
             "status",
@@ -90,6 +96,9 @@ class ListFragment: Fragment() {
 
         recyclerView = view.findViewById(R.id.recyclerView)
         fab = view.findViewById(R.id.floatingActionButton)
+        button = view.findViewById(R.id.button)
+        button2 = view.findViewById(R.id.button2)
+        textView = view.findViewById(R.id.textView)
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
 
         val itemClick = { objectEntity: ObjectEntity -> navigateToSingleObject(objectEntity.id)}
@@ -102,27 +111,61 @@ class ListFragment: Fragment() {
         recyclerView.adapter = objectAdapter
 
         objectViewModel.getListObjects().observe(this) {
+            list1 = it
             objectAdapter.list = it
             objectAdapter.notifyDataSetChanged()
-            Log.d("TAG", "objectAdapter.list = $it")
+            //Log.d("TAG", "objectAdapter.list = $it")
         }
 
         objectViewModel.getListDutyObjects().observe(this) {
             list2 = it
-            Log.d("TAG", "list2 = $it")
+            //Log.d("TAG", "list2 = $it")
             if(isSortByDuty) {
                 objectAdapter.list = list2
                 objectAdapter.notifyDataSetChanged()
             }
         }
 
+        objectViewModel.getCountOfRows().observe(this) {
+            Log.d("TAG", "COUNT - $it")
+            textView.text = "Количество объектов = $it"
+        }
+
+        objectViewModel.getStatus().observe(this) {
+            Log.d("TAG", "STATUS - $it")
+        }
+
         fab.setOnClickListener {
+            findNavController().navigate(R.id.objectFragment)
+        }
+
+        button.setOnClickListener {
             objectAdapter.list = list2
             objectAdapter.notifyDataSetChanged()
 
             val sharedPreferences = activity?.applicationContext!!.getSharedPreferences("settings", AppCompatActivity.MODE_PRIVATE)
+
+            if (sharedPreferences.contains("sortByDuty")) {
+                isSortByDuty = sharedPreferences.getBoolean("sortByDuty", false)
+            }
+
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putBoolean("sortByDuty", true)
+            editor.apply()
+        }
+
+        button2.setOnClickListener {
+            objectAdapter.list = list1
+            objectAdapter.notifyDataSetChanged()
+
+            val sharedPreferences = activity?.applicationContext!!.getSharedPreferences("settings", AppCompatActivity.MODE_PRIVATE)
+
+            if (sharedPreferences.contains("sortByDuty")) {
+                isSortByDuty = sharedPreferences.getBoolean("sortByDuty", false)
+            }
+
+            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+            editor.putBoolean("sortByDuty", false)
             editor.apply()
         }
     }

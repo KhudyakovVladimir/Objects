@@ -17,16 +17,19 @@ class ObjectViewModel @Inject constructor(
     private var listDutyObjects: LiveData<List<ObjectEntity>> = objectDao.getAllDutyObjectsAsLiveData()!!
     private var listObjects: LiveData<List<ObjectEntity>> = objectDao.getAllObjectsAsLiveData()!!
     private var objectsList: ArrayList<ObjectEntity>? = null
+    private var countOfRows: LiveData<Int> = objectDao.getCountOfRows()
+    private var status: LiveData<Int> = objectDao.getStatus()
 
     fun getListDutyObjects(): LiveData<List<ObjectEntity>> {
         return listDutyObjects
     }
 
     fun getListObjects(): LiveData<List<ObjectEntity>> {
-        if(sortType == 0) {
-            return listObjects
-        }
-        return listDutyObjects
+//        if(sortType == 0) {
+//            return listObjects
+//        }
+//        return listDutyObjects
+        return listObjects
     }
 
     fun getListObjectAsList() : List<ObjectEntity> {
@@ -34,5 +37,13 @@ class ObjectViewModel @Inject constructor(
             objectsList = ArrayList(objectDao.getAllNotesAsList())
         }
         return objectsList!!
+    }
+
+    fun getCountOfRows(): LiveData<Int> {
+        return countOfRows
+    }
+
+    fun getStatus(): LiveData<Int> {
+        return status
     }
 }
