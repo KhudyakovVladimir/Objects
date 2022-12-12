@@ -21,11 +21,11 @@ interface ObjectDao {
     @Query("SELECT COUNT(id) FROM objects")
     fun getCountOfRows(): LiveData<Int>
 
-//    @Query("SELECT COUNT(is_checked) FROM table WHERE is_checked = 1")
-//    fun getNumberOfRows(): Int
+    @Query("SELECT COUNT(id) FROM objects WHERE status LIKE :value")
+    fun getStatus(value: String): LiveData<Int>
 
-    @Query("SELECT COUNT(status) FROM objects WHERE status = status")
-    fun getStatus(): LiveData<Int>
+    @Query("SELECT COUNT(id) FROM objects WHERE duty LIKE :value")
+    fun getDuty(value: String): LiveData<Int>
 
     @Query("SELECT COUNT(*) FROM objects")
     fun getCount(): Int

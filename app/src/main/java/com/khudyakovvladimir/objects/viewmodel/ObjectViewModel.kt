@@ -18,7 +18,8 @@ class ObjectViewModel @Inject constructor(
     private var listObjects: LiveData<List<ObjectEntity>> = objectDao.getAllObjectsAsLiveData()!!
     private var objectsList: ArrayList<ObjectEntity>? = null
     private var countOfRows: LiveData<Int> = objectDao.getCountOfRows()
-    private var status: LiveData<Int> = objectDao.getStatus()
+    private var status: LiveData<Int> = objectDao.getStatus("проверен")
+    private var duty: LiveData<Int> = objectDao.getStatus("не проверен")
 
     fun getListDutyObjects(): LiveData<List<ObjectEntity>> {
         return listDutyObjects

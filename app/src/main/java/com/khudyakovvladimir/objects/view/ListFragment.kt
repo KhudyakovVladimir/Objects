@@ -128,11 +128,12 @@ class ListFragment: Fragment() {
 
         objectViewModel.getCountOfRows().observe(this) {
             Log.d("TAG", "COUNT - $it")
-            textView.text = "Количество объектов = $it"
+
         }
 
         objectViewModel.getStatus().observe(this) {
             Log.d("TAG", "STATUS - $it")
+            textView.text = "Обслужено объектов = $it"
         }
 
         fab.setOnClickListener {
