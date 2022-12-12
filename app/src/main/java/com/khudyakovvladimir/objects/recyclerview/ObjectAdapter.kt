@@ -64,7 +64,8 @@ class ObjectAdapter(
             textView2.text = objectEntity.title
 
             if (objectEntity.duty != "") {
-                val unicode = 0x1F692
+                //val unicode = 0x1F692
+                val unicode = 0x1F9EF
                 val textEmoji = String(Character.toChars(unicode))
                 textView3.text = textEmoji
 

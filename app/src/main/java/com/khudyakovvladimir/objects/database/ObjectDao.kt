@@ -24,7 +24,7 @@ interface ObjectDao {
     @Query("SELECT COUNT(id) FROM objects WHERE status LIKE :value")
     fun getStatus(value: String): LiveData<Int>
 
-    @Query("SELECT COUNT(id) FROM objects WHERE duty LIKE :value")
+    @Query("SELECT COUNT(id) FROM objects WHERE duty != :value")
     fun getDuty(value: String): LiveData<Int>
 
     @Query("SELECT COUNT(*) FROM objects")

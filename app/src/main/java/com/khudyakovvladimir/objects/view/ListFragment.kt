@@ -39,6 +39,7 @@ class ListFragment: Fragment() {
     private lateinit var button: Button
     private lateinit var button2: Button
     lateinit var textView: TextView
+    lateinit var textView2: TextView
     private var isDatabaseCreated = false
     private var isSortByDuty = false
 
@@ -99,7 +100,15 @@ class ListFragment: Fragment() {
         button = view.findViewById(R.id.button)
         button2 = view.findViewById(R.id.button2)
         textView = view.findViewById(R.id.textView)
+        textView2 = view.findViewById(R.id.textView2)
         recyclerView.layoutManager = LinearLayoutManager(activity?.applicationContext)
+
+        val unicode = 0x1F9EF
+        val textEmoji = String(Character.toChars(unicode))
+        button.text = textEmoji
+        val unicode2 = 0x2116
+        val textEmoji2 = String(Character.toChars(unicode2))
+        button2.text = textEmoji2
 
         val itemClick = { objectEntity: ObjectEntity -> navigateToSingleObject(objectEntity.id)}
 
@@ -134,6 +143,11 @@ class ListFragment: Fragment() {
         objectViewModel.getStatus().observe(this) {
             Log.d("TAG", "STATUS - $it")
             textView.text = "Обслужено объектов = $it"
+        }
+
+        objectViewModel.getDuty().observe(this) {
+            Log.d("TAG", "DUTY = $it")
+            textView2.text = "Задолженностей = $it"
         }
 
         fab.setOnClickListener {

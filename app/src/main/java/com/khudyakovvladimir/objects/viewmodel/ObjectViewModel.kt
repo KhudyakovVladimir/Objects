@@ -19,7 +19,7 @@ class ObjectViewModel @Inject constructor(
     private var objectsList: ArrayList<ObjectEntity>? = null
     private var countOfRows: LiveData<Int> = objectDao.getCountOfRows()
     private var status: LiveData<Int> = objectDao.getStatus("проверен")
-    private var duty: LiveData<Int> = objectDao.getStatus("не проверен")
+    private var duty: LiveData<Int> = objectDao.getDuty("")
 
     fun getListDutyObjects(): LiveData<List<ObjectEntity>> {
         return listDutyObjects
@@ -46,5 +46,9 @@ class ObjectViewModel @Inject constructor(
 
     fun getStatus(): LiveData<Int> {
         return status
+    }
+
+    fun getDuty(): LiveData<Int> {
+        return duty
     }
 }
