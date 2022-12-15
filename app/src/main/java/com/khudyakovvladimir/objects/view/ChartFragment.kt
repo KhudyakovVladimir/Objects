@@ -21,14 +21,18 @@ class ChartFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater, container, savedInstanceState)
+        return inflater.inflate(R.layout.chart_fragment_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        setBarChart()
     }
 
     private fun setBarChart() {
+        barChart = view!!.findViewById(R.id.barChart)
+
         val entries = ArrayList<BarEntry>()
         entries.add(BarEntry(8f, 0))
         entries.add(BarEntry(2f, 1))
