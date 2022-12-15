@@ -9,5 +9,9 @@
         <action android:id="@+id/action_listFragment_to_objectFragment" app:destination="@id/objectFragment"/>
     </fragment>
     <fragment android:id="@+id/objectFragment" android:name="com.khudyakovvladimir.objects.view.ObjectFragment"
-              android:label="ObjectFragment"/>
+              android:label="ObjectFragment">
+        <action android:id="@+id/action_objectFragment_to_chartFragment" app:destination="@id/chartFragment"/>
+    </fragment>
+    <fragment android:id="@+id/chartFragment" android:name="com.khudyakovvladimir.objects.view.ChartFragment"
+              android:label="ChartFragment"/>
 </navigation>

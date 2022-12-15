@@ -77,4 +77,7 @@ dependencies {
 
     //material design
     implementation 'com.google.android.material:material:1.6.1'
+
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v2.2.4'
 }
