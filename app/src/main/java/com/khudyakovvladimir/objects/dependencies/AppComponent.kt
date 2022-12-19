@@ -6,6 +6,7 @@ import androidx.fragment.app.ListFragment
 import androidx.room.Room
 import com.khudyakovvladimir.objects.database.DBHelper
 import com.khudyakovvladimir.objects.database.ObjectDatabase
+import com.khudyakovvladimir.objects.utils.TimeHelper
 import com.khudyakovvladimir.objects.view.ObjectFragment
 import dagger.BindsInstance
 import dagger.Component
@@ -46,5 +47,10 @@ class MainModule {
     @Provides
     fun provideSortType(): Int {
         return 0
+    }
+
+    @Provides
+    fun provideTimeHelper(): TimeHelper {
+        return TimeHelper()
     }
 }

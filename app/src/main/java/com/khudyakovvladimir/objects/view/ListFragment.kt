@@ -82,7 +82,7 @@ class ListFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         objectViewModelFactory = factory.createObjectViewModelFactory(activity!!.application)
-        objectViewModel = ViewModelProvider(this, objectViewModelFactory).get(ObjectViewModel::class.java)
+        objectViewModel = ViewModelProvider(this, objectViewModelFactory)[ObjectViewModel::class.java]
 
         var list = listOf(ObjectEntity(1,
             "Object",
@@ -111,8 +111,9 @@ class ListFragment: Fragment() {
         val unicode2 = 0x2116
         val textEmoji2 = String(Character.toChars(unicode2))
         button2.text = textEmoji2
-        button3.text = textEmoji2
-
+        val unicode3 = 0x1F4C8
+        val textEmoji3 = String(Character.toChars(unicode3))
+        button3.text = textEmoji3
 
         val itemClick = { objectEntity: ObjectEntity -> navigateToSingleObject(objectEntity.id)}
 

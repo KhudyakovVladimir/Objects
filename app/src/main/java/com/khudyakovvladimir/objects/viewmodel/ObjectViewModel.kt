@@ -5,13 +5,15 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import com.khudyakovvladimir.objects.database.ObjectDao
 import com.khudyakovvladimir.objects.database.ObjectEntity
+import com.khudyakovvladimir.objects.utils.TimeHelper
 import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 class ObjectViewModel @Inject constructor(
     application: Application,
     val objectDao: ObjectDao,
-    val sortType: Int
+    val sortType: Int,
+    val timeHelper: TimeHelper
 ): AndroidViewModel(application) {
 
     private var listDutyObjects: LiveData<List<ObjectEntity>> = objectDao.getAllDutyObjectsAsLiveData()!!

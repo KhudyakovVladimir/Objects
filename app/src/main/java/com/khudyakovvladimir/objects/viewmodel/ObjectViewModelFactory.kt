@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.khudyakovvladimir.objects.database.ObjectDao
+import com.khudyakovvladimir.objects.utils.TimeHelper
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
@@ -13,7 +14,8 @@ class ObjectViewModelFactory @AssistedInject constructor(
     @Assisted("application")
     var application: Application,
     var objectDao: ObjectDao,
-    var sortType: Int
+    var sortType: Int,
+    var timeHelper: TimeHelper
 ): ViewModelProvider.Factory {
 
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
@@ -22,7 +24,8 @@ class ObjectViewModelFactory @AssistedInject constructor(
             return ObjectViewModel(
                 application = application,
                 objectDao = objectDao,
-                sortType = sortType
+                sortType = sortType,
+                timeHelper = timeHelper
             ) as T
         }
         throw IllegalArgumentException("Unable to construct ObjectViewModel")

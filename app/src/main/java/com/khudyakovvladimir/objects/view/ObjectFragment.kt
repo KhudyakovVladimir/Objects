@@ -1,7 +1,10 @@
 package com.khudyakovvladimir.objects.view
 
+import android.Manifest
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
@@ -13,12 +16,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.khudyakovvladimir.objects.R
 import com.khudyakovvladimir.objects.application.appComponent
 import com.khudyakovvladimir.objects.database.ObjectEntity
+import com.khudyakovvladimir.objects.utils.TimeHelper
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModel
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModelFactory
 import kotlinx.coroutines.CoroutineScope
@@ -35,7 +41,7 @@ class ObjectFragment: Fragment() {
     lateinit var buttonOptions: Button
     lateinit var buttonDelete: Button
     lateinit var buttonMap: ImageView
-    lateinit var buttonMap2: ImageView
+    lateinit var buttonPhone: ImageView
 
     lateinit var checkBoxStatus: CheckBox
     lateinit var checkBoxDuty: CheckBox
@@ -50,6 +56,9 @@ class ObjectFragment: Fragment() {
     lateinit var editTextLatitude: EditText
 
     lateinit var objectEntity: ObjectEntity
+
+    @Inject
+    lateinit var timeHelper: TimeHelper
 
     @Inject
     lateinit var factory: ObjectViewModelFactory.Factory
@@ -83,7 +92,7 @@ class ObjectFragment: Fragment() {
         Log.d("TAG", "id = $id")
 
         objectViewModelFactory = factory.createObjectViewModelFactory(activity!!.application)
-        objectViewModel = ViewModelProvider(this, objectViewModelFactory).get(ObjectViewModel::class.java)
+        objectViewModel = ViewModelProvider(this, objectViewModelFactory)[ObjectViewModel::class.java]
 
         initViews(view)
 
@@ -138,9 +147,9 @@ class ObjectFragment: Fragment() {
             buttonSave.setBackgroundColor(Color.GRAY)
             buttonDelete.setBackgroundColor(Color.RED)
 
-            buttonAdd.setEnabled(true)
-            buttonSave.setEnabled(true)
-            buttonDelete.setEnabled(true)
+            buttonAdd.isEnabled = true
+            buttonSave.isEnabled = true
+            buttonDelete.isEnabled = true
         }
 
         buttonMap.setOnClickListener {
@@ -158,14 +167,25 @@ class ObjectFragment: Fragment() {
 
         }
 
-        buttonMap2.setOnClickListener {
-            if(objectEntity.nearest != "") {
-                val bundle = Bundle()
-                bundle.putInt("objectID", objectEntity.nearest.toInt())
-                findNavController().navigate(R.id.objectFragment, bundle)
-            }else {
-                makeToast("Добавьте ближайший объект!")
+        buttonPhone.setOnClickListener {
+            //CALL
+            val permissionCheck = ContextCompat.checkSelfPermission(context!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+            if (permissionCheck != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(
+                    context as Activity,
+                    arrayOf(
+                        Manifest.permission.CALL_PHONE
+                    ),1111)
             }
+
+            if(editTextNearest.text.toString() != "") {
+                val intent = Intent()
+                intent.action = Intent.ACTION_CALL
+                intent.data = Uri.parse("tel:${editTextNearest.text.toString()}")
+                startActivity(intent)
+            }else
+                makeToast("Номер некорректен или отсутствует.")
+
         }
 
         checkBoxStatus.setOnCheckedChangeListener { buttonView, isChecked ->
@@ -248,6 +268,9 @@ class ObjectFragment: Fragment() {
              }
         }
 
+        Log.d("TAG", "TIME HELPER getCurrentTime() - ${timeHelper.getCurrentTime()}")
+        Log.d("TAG", "TIME HELPER getCurrentTimeForTextView() - ${timeHelper.getCurrentTimeForTextView()}")
+
     }
 
     private fun initViews(view: View) {
@@ -256,7 +279,7 @@ class ObjectFragment: Fragment() {
         buttonOptions = view.findViewById(R.id.buttonOptions)
         buttonDelete = view.findViewById(R.id.buttonDelete)
         buttonMap = view.findViewById(R.id.buttonMap)
-        buttonMap2 = view.findViewById(R.id.buttonMap2)
+        buttonPhone = view.findViewById(R.id.buttonPhone)
         checkBoxStatus = view.findViewById(R.id.checkBoxStatus)
         checkBoxDuty = view.findViewById(R.id.checkBoxDuty)
         editTextTitle = view.findViewById(R.id.editTextTitle)
