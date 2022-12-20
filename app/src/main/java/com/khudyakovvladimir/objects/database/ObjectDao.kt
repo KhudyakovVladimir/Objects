@@ -12,6 +12,9 @@ interface ObjectDao {
     @Query("SELECT * FROM objects")
     fun getAllNotesAsList(): List<ObjectEntity>
 
+    @Query("SELECT icon FROM objects")
+    fun getListOfDays(): List<String>
+
     @Query("SELECT * FROM objects")
     fun getAllObjectsAsLiveData(): LiveData<List<ObjectEntity>>?
 
