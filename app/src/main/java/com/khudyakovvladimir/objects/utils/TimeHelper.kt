@@ -27,6 +27,7 @@ class TimeHelper @Inject constructor(){
 
         var monthAsWord = getMonth(month)
 
+        //return "$day $monthAsWord - $hoursAndMinutes"
         return "$day $monthAsWord - $hoursAndMinutes"
     }
 
@@ -118,6 +119,65 @@ class TimeHelper @Inject constructor(){
             }
             "12" -> {
                 monthAsWord = "декабря"
+            }
+        }
+        return monthAsWord
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getDay(): String {
+
+        val timeZone = TimeZone.getTimeZone("UTC")
+        val calendar = Calendar.getInstance(timeZone)
+        val simpleDateFormatDay = SimpleDateFormat("dd")
+
+        TimeZone.setDefault(TimeZone.getTimeZone("Europe/Moscow"))
+
+        var day = simpleDateFormatDay.format(calendar.time)
+        if(day[0] == '0') {
+            day = day[1].toString()
+        }
+        return day
+    }
+
+    private fun getCountOfDaysAtCurrentMonth(month: String): Int {
+        var monthAsWord = 0
+        when (month) {
+            "01" -> {
+                monthAsWord = 31
+            }
+            "02" -> {
+                monthAsWord = 28
+            }
+            "03" -> {
+                monthAsWord = 31
+            }
+            "04" -> {
+                monthAsWord = 30
+            }
+            "05" -> {
+                monthAsWord = 31
+            }
+            "06" -> {
+                monthAsWord = 30
+            }
+            "07" -> {
+                monthAsWord = 31
+            }
+            "08" -> {
+                monthAsWord = 31
+            }
+            "09" -> {
+                monthAsWord = 30
+            }
+            "10" -> {
+                monthAsWord = 31
+            }
+            "11" -> {
+                monthAsWord = 30
+            }
+            "12" -> {
+                monthAsWord = 31
             }
         }
         return monthAsWord

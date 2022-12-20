@@ -181,7 +181,7 @@ class ObjectFragment: Fragment() {
             if(editTextNearest.text.toString() != "") {
                 val intent = Intent()
                 intent.action = Intent.ACTION_CALL
-                intent.data = Uri.parse("tel:${editTextNearest.text.toString()}")
+                intent.data = Uri.parse("tel:${editTextNearest.text}")
                 startActivity(intent)
             }else
                 makeToast("Номер некорректен или отсутствует.")
@@ -251,6 +251,7 @@ class ObjectFragment: Fragment() {
                     editTextComment.setText(objectEntity.comment)
                     editTextLongitude.setText(objectEntity.longitude)
                     editTextLatitude.setText(objectEntity.latitude)
+                    Log.d("TAG", "ENTITY DAY - ${objectEntity.icon}")
 
                     if (objectEntity.status == "проверен") {
                         checkBoxStatus.isChecked = true
@@ -267,9 +268,6 @@ class ObjectFragment: Fragment() {
                 }
              }
         }
-
-        Log.d("TAG", "TIME HELPER getCurrentTime() - ${timeHelper.getCurrentTime()}")
-        Log.d("TAG", "TIME HELPER getCurrentTimeForTextView() - ${timeHelper.getCurrentTimeForTextView()}")
 
     }
 
@@ -327,7 +325,8 @@ class ObjectFragment: Fragment() {
             editTextDuty.text.toString(),
             editTextCoordinates.text.toString(),
             editTextComment.text.toString(),
-            "icon",
+            //"icon",
+            timeHelper.getDay(),
             editTextLongitude.text.toString(),
             editTextLatitude.text.toString()
         )

@@ -73,12 +73,10 @@ class ListFragment: Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        Log.d("TAG", "_______onCreateView_______")
         return inflater.inflate(R.layout.list_fragment_layout, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        Log.d("TAG", "_______onViewCreated______")
         super.onViewCreated(view, savedInstanceState)
 
         objectViewModelFactory = factory.createObjectViewModelFactory(activity!!.application)
@@ -141,17 +139,14 @@ class ListFragment: Fragment() {
         }
 
         objectViewModel.getCountOfRows().observe(this) {
-            Log.d("TAG", "COUNT - $it")
 
         }
 
         objectViewModel.getStatus().observe(this) {
-            Log.d("TAG", "STATUS - $it")
             textView.text = "Обслужено объектов = $it"
         }
 
         objectViewModel.getDuty().observe(this) {
-            Log.d("TAG", "DUTY = $it")
             textView2.text = "Задолженностей = $it"
         }
 
