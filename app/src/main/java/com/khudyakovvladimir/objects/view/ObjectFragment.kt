@@ -89,7 +89,7 @@ class ObjectFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         var id = arguments?.getInt("objectID",0)
-        Log.d("TAG", "id = $id")
+            //Log.d("TAG", "id = $id")
 
         objectViewModelFactory = factory.createObjectViewModelFactory(activity!!.application)
         objectViewModel = ViewModelProvider(this, objectViewModelFactory)[ObjectViewModel::class.java]
@@ -158,7 +158,7 @@ class ObjectFragment: Fragment() {
             val latitude = objectEntity.latitude
             val geoUriString = "geo:${longitude},${latitude}?z=15"
 
-            Log.d("TAG", "GEO - longitude : ${longitude} , latitude : ${latitude} ")
+            //Log.d("TAG", "GEO - longitude : ${longitude} , latitude : ${latitude} ")
 
             val geoUri: Uri = Uri.parse(geoUriString)
             val mapIntent = Intent(Intent.ACTION_VIEW, geoUri)
@@ -196,14 +196,12 @@ class ObjectFragment: Fragment() {
             if(isChecked) {
                 makeToast("Объект обслужен.")
                 CoroutineScope(Dispatchers.IO).launch {
-                    Log.d("TAG", "CHECKBOX - is checked !")
                     objectViewModel.objectDao.insertObjectEntity(
                         generateNewObjectWithCheckbox(id!!, "проверен"))
                 }
             }else {
                 makeToast("Объект не обслужен !")
                 CoroutineScope(Dispatchers.IO).launch {
-                    Log.d("TAG", "CHECKBOX - is NOT checked !")
                     objectViewModel.objectDao.insertObjectEntity(
                         generateNewObjectWithCheckbox(id!!, "не проверен"))
                 }
@@ -213,9 +211,7 @@ class ObjectFragment: Fragment() {
         checkBoxDuty.setOnCheckedChangeListener { buttonView, isChecked ->
             CoroutineScope(Dispatchers.IO).launch {
                 if(isChecked) {
-                    Log.d("TAG", "CHECKBOX - is checked !")
                 }else {
-                    Log.d("TAG", "CHECKBOX - is NOT checked !")
                     editTextDuty.setText("")
                     objectViewModel.objectDao.insertObjectEntity(
                         generateNewObjectWithCheckbox(id!!, "не проверен"))
@@ -240,7 +236,7 @@ class ObjectFragment: Fragment() {
                     objectViewModel.objectDao.getObjectById(id!!)
                 }
                 objectEntity = tempObject1.await()
-                Log.d("TAG", "AWAIT - objectT.name = ${objectEntity.title}")
+                //Log.d("TAG", "AWAIT - objectT.name = ${objectEntity.title}")
 
                 CoroutineScope(Dispatchers.Main).launch {
                     editTextTitle.setText(objectEntity.title)
@@ -255,11 +251,9 @@ class ObjectFragment: Fragment() {
 
                     if (objectEntity.status == "проверен") {
                         checkBoxStatus.isChecked = true
-                        Log.d("TAG", "TRUE")
                     }
                     if (objectEntity.status == "не проверен") {
                         checkBoxStatus.isChecked = false
-                        Log.d("TAG", "FALSE")
                     }
 
                     if(objectEntity.duty != "") {
