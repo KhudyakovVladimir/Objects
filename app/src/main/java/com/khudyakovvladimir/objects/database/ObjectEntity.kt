@@ -14,7 +14,7 @@ data class ObjectEntity(
     var title: String,
 
     @ColumnInfo(name = "type", typeAffinity = ColumnInfo.TEXT)
-    var nearest: String,
+    var phone: String,
 
     @ColumnInfo(name = "status", typeAffinity = ColumnInfo.TEXT)
     var status: String,
@@ -29,7 +29,7 @@ data class ObjectEntity(
     var comment: String,
 
     @ColumnInfo(name = "icon", typeAffinity = ColumnInfo.TEXT)
-    var icon: String,
+    var call: String,
 
     @ColumnInfo(name = "longitude", typeAffinity = ColumnInfo.TEXT)
     var longitude: String,

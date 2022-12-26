@@ -43,17 +43,19 @@ class ObjectFragment: Fragment() {
     lateinit var buttonMap: ImageView
     lateinit var buttonPhone: ImageView
 
-    lateinit var checkBoxStatus: CheckBox
-    lateinit var checkBoxDuty: CheckBox
+    private lateinit var checkBoxStatus: CheckBox
+    private lateinit var checkBoxDuty: CheckBox
 
     lateinit var editTextTitle: EditText
     lateinit var editTextStatus: EditText
     lateinit var editTextDuty: EditText
-    lateinit var editTextNearest: EditText
+    lateinit var editTextPhone: EditText
     lateinit var editTextCoordinates: EditText
     lateinit var editTextComment: EditText
     lateinit var editTextLongitude: EditText
     lateinit var editTextLatitude: EditText
+    lateinit var textViewCall: TextView
+    lateinit var imageViewCall: ImageView
 
     lateinit var objectEntity: ObjectEntity
 
@@ -178,10 +180,10 @@ class ObjectFragment: Fragment() {
                     ),1111)
             }
 
-            if(editTextNearest.text.toString() != "") {
+            if(editTextPhone.text.toString() != "") {
                 val intent = Intent()
                 intent.action = Intent.ACTION_CALL
-                intent.data = Uri.parse("tel:${editTextNearest.text}")
+                intent.data = Uri.parse("tel:${editTextPhone.text}")
                 startActivity(intent)
             }else
                 makeToast("Номер некорректен или отсутствует.")
@@ -219,15 +221,23 @@ class ObjectFragment: Fragment() {
             }
         }
 
+        imageViewCall.setOnClickListener {
+            val currentNumberOfCalls = textViewCall.text.toString().toInt()
+            val newNumberOfCalls = currentNumberOfCalls + 1
+            textViewCall.text = newNumberOfCalls.toString()
+        }
+
+        //________________________________________________________________________
+
         if(id != null) {
             var tempObject = ObjectEntity(1,
                 "Object",
-                "type",
+                "phone",
                 "status",
                 "duty",
-                "coordinates",
+                "address",
                 "comment",
-                "icon",
+                "0",
                 "",
                 ""
             )
@@ -242,12 +252,13 @@ class ObjectFragment: Fragment() {
                     editTextTitle.setText(objectEntity.title)
                     editTextStatus.setText(objectEntity.status)
                     editTextDuty.setText(objectEntity.duty)
-                    editTextNearest.setText(objectEntity.nearest)
+                    editTextPhone.setText(objectEntity.phone)
                     editTextCoordinates.setText(objectEntity.address)
                     editTextComment.setText(objectEntity.comment)
                     editTextLongitude.setText(objectEntity.longitude)
                     editTextLatitude.setText(objectEntity.latitude)
-                    Log.d("TAG", "ENTITY DAY - ${objectEntity.icon}")
+                    textViewCall.text = objectEntity.call
+                    //Log.d("TAG", "ENTITY DAY - ${objectEntity.call}")
 
                     if (objectEntity.status == "проверен") {
                         checkBoxStatus.isChecked = true
@@ -277,13 +288,23 @@ class ObjectFragment: Fragment() {
         editTextTitle = view.findViewById(R.id.editTextTitle)
         editTextStatus = view.findViewById(R.id.editTextStatus)
         editTextDuty = view.findViewById(R.id.editTextDuty)
-        editTextNearest = view.findViewById(R.id.editTextNearest)
+        editTextPhone = view.findViewById(R.id.editTextPhone)
         editTextCoordinates = view.findViewById(R.id.editTextAddress)
         editTextComment = view.findViewById(R.id.editTextComment)
         editTextLongitude = view.findViewById(R.id.editTextLongitude)
         editTextLatitude = view.findViewById(R.id.editTextLatitude)
+        textViewCall = view.findViewById(R.id.textViewCall)
+        imageViewCall = view.findViewById(R.id.imageViewCall)
 
-        val list = listOf(editTextTitle, editTextStatus, editTextDuty, editTextNearest, editTextCoordinates, editTextComment, editTextLongitude, editTextLatitude)
+        val list = listOf(
+            editTextTitle,
+            editTextStatus,
+            editTextDuty,
+            editTextPhone,
+            editTextCoordinates,
+            editTextComment,
+            editTextLongitude,
+            editTextLatitude)
         setInputTypeForEditText(list)
     }
 
@@ -292,7 +313,7 @@ class ObjectFragment: Fragment() {
         val size = list.size
         val lastObject = list[size - 1]
         val lastObjectId = lastObject.id
-        return lastObjectId!! + 1
+        return lastObjectId + 1
     }
 
     private fun generateNewObject(id: Int): ObjectEntity {
@@ -301,10 +322,10 @@ class ObjectFragment: Fragment() {
             editTextTitle.text.toString(),
             editTextStatus.text.toString(),
             editTextDuty.text.toString(),
-            editTextNearest.text.toString(),
+            editTextPhone.text.toString(),
             editTextCoordinates.text.toString(),
             editTextComment.text.toString(),
-            "icon",
+            textViewCall.text.toString(),
             editTextLongitude.text.toString(),
             editTextLatitude.text.toString()
         )
@@ -314,13 +335,12 @@ class ObjectFragment: Fragment() {
         return ObjectEntity(
             id,
             editTextTitle.text.toString(),
-            editTextNearest.text.toString(),
+            editTextPhone.text.toString(),
             isChecked,
             editTextDuty.text.toString(),
             editTextCoordinates.text.toString(),
             editTextComment.text.toString(),
-            //"icon",
-            timeHelper.getDay(),
+            textViewCall.text.toString(),
             editTextLongitude.text.toString(),
             editTextLatitude.text.toString()
         )
