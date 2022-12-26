@@ -6,6 +6,7 @@ import com.khudyakovvladimir.objects.dependencies.AppComponent
 import com.khudyakovvladimir.objects.dependencies.DaggerAppComponent
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
+import kotlin.properties.Delegates
 
 class MyApplication: Application() {
 
@@ -29,3 +30,4 @@ get() = when(this) {
     is MyApplication -> appComponent
     else -> applicationContext.appComponent
 }
+

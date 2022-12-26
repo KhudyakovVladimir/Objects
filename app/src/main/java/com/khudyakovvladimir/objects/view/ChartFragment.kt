@@ -36,6 +36,9 @@ class ChartFragment: Fragment() {
     private lateinit var objectViewModel: ObjectViewModel
     private lateinit var objectViewModelFactory: ObjectViewModelFactory
 
+    var count = 0
+    var list = emptyList<String>()
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
@@ -49,12 +52,27 @@ class ChartFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setBarChart()
-
         objectViewModelFactory = factory.createObjectViewModelFactory(activity!!.application)
         objectViewModel = ViewModelProvider(this, objectViewModelFactory)[ObjectViewModel::class.java]
 
-        val arrayOfDays = getArrayOfDays()
+        barChart = view.findViewById(R.id.barChart)
+
+        var arrayOfDays = list
+        //await
+        CoroutineScope(Dispatchers.IO).launch {
+            var go = async {
+                getArrayOfDays()
+            }
+           arrayOfDays = go.await()
+        }
+
+        objectViewModel.getCountOfRows().observe(this) {
+            //Log.d("TAG", "getCountOfRows() - $it")
+            count = it
+            setBarChart(count, list)
+        }
+
+
 
         Log.d("TAG", "arrayOfDays - $arrayOfDays")
     }
@@ -67,32 +85,37 @@ class ChartFragment: Fragment() {
             }
             val v = countOfObjects.await()
             vv = v
-            Log.d("TAG", "countOfObjects - ${countOfObjects.await()}")
+            Log.d("TAG", "countOfObjects # 1 - $vv")
+            Log.d("TAG", "getCountOfRows() - $count")
+            list = vv
         }
         return vv
     }
 
-    private fun setBarChart() {
-        barChart = view!!.findViewById(R.id.barChart)
-
+    private fun setBarChart(count: Int, list: List<String>) {
         val entries = ArrayList<BarEntry>()
-
         val labels = ArrayList<String>()
 
+        //set the y-axis and x-axis
         for (i in 1..timeHelper.getCountOfDaysAtCurrentMonth(timeHelper.getMonth().toString())) {
-            entries.add(BarEntry(0f + i.toFloat(), i - 1))
-            labels.add(i.toString())
-        }
+        entries.add(BarEntry(0f + i.toFloat(), i - 1))
+        labels.add(i.toString())
+    }
+        Log.d("TAG", "count - $count")
+        Log.d("TAG", "list - $list")
+//        for (i in 0..count - 1) {
+//            Log.d("TAG", "i - $i")
+//            entries.add(BarEntry(1f + list[i].toFloat(), list[i].toInt() - 1))
+//            Log.d("TAG", "1f + list[i].toFloat() - ${1f + list[i].toFloat()}")
+//            Log.d("TAG", "list[i].toInt() - 1 - ${list[i].toInt() - 1}")
+//            labels.add(list[i])
+//        }
 
-        val barDataSet = BarDataSet(entries, "Дни месяца")
-
+        val barDataSet = BarDataSet(entries, "Объекты")
         val data = BarData(labels, barDataSet)
         barChart.data = data
-
-        barChart.setDescription("Посещение объектов по дням недели")
-
+        barChart.setDescription("Количество посещений")
         barDataSet.color = resources.getColor(R.color.red)
-
         barChart.animateY(1000)
     }
 

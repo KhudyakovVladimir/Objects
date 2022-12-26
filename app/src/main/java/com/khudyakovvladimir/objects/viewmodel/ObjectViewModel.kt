@@ -28,10 +28,6 @@ class ObjectViewModel @Inject constructor(
     }
 
     fun getListObjects(): LiveData<List<ObjectEntity>> {
-//        if(sortType == 0) {
-//            return listObjects
-//        }
-//        return listDutyObjects
         return listObjects
     }
 

@@ -139,7 +139,7 @@ class ListFragment: Fragment() {
         }
 
         objectViewModel.getCountOfRows().observe(this) {
-
+            //Log.d("TAG", "getCountOfRows() - $it")
         }
 
         objectViewModel.getStatus().observe(this) {
