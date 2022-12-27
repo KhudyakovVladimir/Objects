@@ -56,6 +56,7 @@ class ObjectFragment: Fragment() {
     lateinit var editTextLatitude: EditText
     lateinit var textViewCall: TextView
     lateinit var imageViewCall: ImageView
+    lateinit var editTextPerson: EditText
 
     lateinit var objectEntity: ObjectEntity
 
@@ -222,6 +223,9 @@ class ObjectFragment: Fragment() {
         }
 
         imageViewCall.setOnClickListener {
+            if(textViewCall.text == "") {
+                textViewCall.text = "0"
+            }
             val currentNumberOfCalls = textViewCall.text.toString().toInt()
             val newNumberOfCalls = currentNumberOfCalls + 1
             textViewCall.text = newNumberOfCalls.toString()
@@ -238,6 +242,7 @@ class ObjectFragment: Fragment() {
                 "address",
                 "comment",
                 "0",
+                "",
                 "",
                 ""
             )
@@ -258,6 +263,7 @@ class ObjectFragment: Fragment() {
                     editTextLongitude.setText(objectEntity.longitude)
                     editTextLatitude.setText(objectEntity.latitude)
                     textViewCall.text = objectEntity.call
+                    editTextPerson.setText(objectEntity.person)
                     //Log.d("TAG", "ENTITY DAY - ${objectEntity.call}")
 
                     if (objectEntity.status == "проверен") {
@@ -295,6 +301,7 @@ class ObjectFragment: Fragment() {
         editTextLatitude = view.findViewById(R.id.editTextLatitude)
         textViewCall = view.findViewById(R.id.textViewCall)
         imageViewCall = view.findViewById(R.id.imageViewCall)
+        editTextPerson = view.findViewById(R.id.editTextName)
 
         val list = listOf(
             editTextTitle,
@@ -327,7 +334,8 @@ class ObjectFragment: Fragment() {
             editTextComment.text.toString(),
             textViewCall.text.toString(),
             editTextLongitude.text.toString(),
-            editTextLatitude.text.toString()
+            editTextLatitude.text.toString(),
+            editTextPerson.text.toString()
         )
     }
 
@@ -342,7 +350,8 @@ class ObjectFragment: Fragment() {
             editTextComment.text.toString(),
             textViewCall.text.toString(),
             editTextLongitude.text.toString(),
-            editTextLatitude.text.toString()
+            editTextLatitude.text.toString(),
+            editTextPerson.text.toString()
         )
     }
 

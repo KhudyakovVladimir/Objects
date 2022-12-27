@@ -36,4 +36,7 @@ data class ObjectEntity(
 
     @ColumnInfo(name = "latitude", typeAffinity = ColumnInfo.TEXT)
     var latitude: String,
+
+    @ColumnInfo(name = "person", typeAffinity = ColumnInfo.TEXT)
+    var person: String
 )

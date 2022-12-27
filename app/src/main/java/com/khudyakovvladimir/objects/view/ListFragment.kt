@@ -89,7 +89,8 @@ class ListFragment: Fragment() {
             "duty",
             "coordinates",
             "comment",
-            "icon",
+            "0",
+            "",
             "",
             ""
         ))
@@ -106,7 +107,7 @@ class ListFragment: Fragment() {
         val unicode = 0x1F9EF
         val textEmoji = String(Character.toChars(unicode))
         button.text = textEmoji
-        val unicode2 = 0x2116
+        val unicode2 = 0x1F692
         val textEmoji2 = String(Character.toChars(unicode2))
         button2.text = textEmoji2
         val unicode3 = 0x1F4C8

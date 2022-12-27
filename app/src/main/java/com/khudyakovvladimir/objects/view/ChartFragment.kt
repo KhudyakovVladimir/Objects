@@ -68,14 +68,9 @@ class ChartFragment: Fragment() {
         }
 
         objectViewModel.getCountOfRows().observe(this) {
-            //Log.d("TAG", "getCountOfRows() - $it")
             count = it
-            setBarChart(count, list)
+            setBarChart(list.size, list)
         }
-
-
-
-        //Log.d("TAG", "arrayOfDays - $arrayOfDays")
     }
 
     private fun getArrayOfDays(): List<String> {
@@ -86,8 +81,6 @@ class ChartFragment: Fragment() {
             }
             val v = countOfObjects.await()
             vv = v
-            //Log.d("TAG", "countOfObjects # 1 - $vv")
-            //Log.d("TAG", "getCountOfRows() - $count")
             list = vv
         }
         return vv
@@ -98,18 +91,12 @@ class ChartFragment: Fragment() {
         val labels = ArrayList<String>()
 
         //set the y-axis and x-axis
-//        for (i in 1..timeHelper.getCountOfDaysAtCurrentMonth(timeHelper.getMonth().toString())) {
-//        entries.add(BarEntry(0f + i.toFloat(), i - 1))
-//        labels.add(i.toString())
-//    }
         Log.d("TAG", "count - $count")
         Log.d("TAG", "list - $list")
         for (i in 0..count - 1) {
             Log.d("TAG", "i - $i")
-            entries.add(BarEntry(list[i].toFloat(), i.toInt()))
-            Log.d("TAG", "0f + list[i].toFloat() - ${list[i].toFloat()}")
-            Log.d("TAG", "list[i].toInt() - ${list[i].toInt()}")
-            labels.add(list[i])
+            entries.add(BarEntry(list[i].toFloat(), i))
+            labels.add((i + 1).toString())
         }
 
         Log.d("TAG", "entries - $entries")
