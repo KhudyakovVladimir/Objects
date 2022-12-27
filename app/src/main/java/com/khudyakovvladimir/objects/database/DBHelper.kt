@@ -28,7 +28,7 @@ class DBHelper(private val context: Context) {
                         "",
                         "",
                         "",
-                        "",
+                        "0",
                         "",
                         "",
                         ""

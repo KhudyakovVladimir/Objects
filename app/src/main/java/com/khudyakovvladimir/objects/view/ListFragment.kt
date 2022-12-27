@@ -144,11 +144,11 @@ class ListFragment: Fragment() {
         }
 
         objectViewModel.getStatus().observe(this) {
-            textView.text = "Обслужено объектов = $it"
+            textView.text = "$it"
         }
 
         objectViewModel.getDuty().observe(this) {
-            textView2.text = "Задолженностей = $it"
+            textView2.text = "$it"
         }
 
         fab.setOnClickListener {
