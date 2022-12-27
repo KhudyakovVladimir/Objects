@@ -37,7 +37,8 @@ class ChartFragment: Fragment() {
     private lateinit var objectViewModelFactory: ObjectViewModelFactory
 
     var count = 0
-    var list = emptyList<String>()
+    //var list = emptyList<String>()
+    var list = listOf("0")
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -74,7 +75,7 @@ class ChartFragment: Fragment() {
 
 
 
-        Log.d("TAG", "arrayOfDays - $arrayOfDays")
+        //Log.d("TAG", "arrayOfDays - $arrayOfDays")
     }
 
     private fun getArrayOfDays(): List<String> {
@@ -85,8 +86,8 @@ class ChartFragment: Fragment() {
             }
             val v = countOfObjects.await()
             vv = v
-            Log.d("TAG", "countOfObjects # 1 - $vv")
-            Log.d("TAG", "getCountOfRows() - $count")
+            //Log.d("TAG", "countOfObjects # 1 - $vv")
+            //Log.d("TAG", "getCountOfRows() - $count")
             list = vv
         }
         return vv
@@ -97,19 +98,22 @@ class ChartFragment: Fragment() {
         val labels = ArrayList<String>()
 
         //set the y-axis and x-axis
-        for (i in 1..timeHelper.getCountOfDaysAtCurrentMonth(timeHelper.getMonth().toString())) {
-        entries.add(BarEntry(0f + i.toFloat(), i - 1))
-        labels.add(i.toString())
-    }
+//        for (i in 1..timeHelper.getCountOfDaysAtCurrentMonth(timeHelper.getMonth().toString())) {
+//        entries.add(BarEntry(0f + i.toFloat(), i - 1))
+//        labels.add(i.toString())
+//    }
         Log.d("TAG", "count - $count")
         Log.d("TAG", "list - $list")
-//        for (i in 0..count - 1) {
-//            Log.d("TAG", "i - $i")
-//            entries.add(BarEntry(1f + list[i].toFloat(), list[i].toInt() - 1))
-//            Log.d("TAG", "1f + list[i].toFloat() - ${1f + list[i].toFloat()}")
-//            Log.d("TAG", "list[i].toInt() - 1 - ${list[i].toInt() - 1}")
-//            labels.add(list[i])
-//        }
+        for (i in 0..count - 1) {
+            Log.d("TAG", "i - $i")
+            entries.add(BarEntry(list[i].toFloat(), i.toInt()))
+            Log.d("TAG", "0f + list[i].toFloat() - ${list[i].toFloat()}")
+            Log.d("TAG", "list[i].toInt() - ${list[i].toInt()}")
+            labels.add(list[i])
+        }
+
+        Log.d("TAG", "entries - $entries")
+        Log.d("TAG", "labels - $labels")
 
         val barDataSet = BarDataSet(entries, "Объекты")
         val data = BarData(labels, barDataSet)
