@@ -33,7 +33,6 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-
 class ObjectFragment: Fragment() {
 
     lateinit var buttonAdd: Button
@@ -92,7 +91,6 @@ class ObjectFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         var id = arguments?.getInt("objectID",0)
-            //Log.d("TAG", "id = $id")
 
         objectViewModelFactory = factory.createObjectViewModelFactory(activity!!.application)
         objectViewModel = ViewModelProvider(this, objectViewModelFactory)[ObjectViewModel::class.java]
@@ -160,8 +158,6 @@ class ObjectFragment: Fragment() {
             val longitude = objectEntity.longitude
             val latitude = objectEntity.latitude
             val geoUriString = "geo:${longitude},${latitude}?z=15"
-
-            //Log.d("TAG", "GEO - longitude : ${longitude} , latitude : ${latitude} ")
 
             val geoUri: Uri = Uri.parse(geoUriString)
             val mapIntent = Intent(Intent.ACTION_VIEW, geoUri)
@@ -251,7 +247,6 @@ class ObjectFragment: Fragment() {
                     objectViewModel.objectDao.getObjectById(id!!)
                 }
                 objectEntity = tempObject1.await()
-                //Log.d("TAG", "AWAIT - objectT.name = ${objectEntity.title}")
 
                 CoroutineScope(Dispatchers.Main).launch {
                     editTextTitle.setText(objectEntity.title)
@@ -264,7 +259,6 @@ class ObjectFragment: Fragment() {
                     editTextLatitude.setText(objectEntity.latitude)
                     textViewCall.text = objectEntity.call
                     editTextPerson.setText(objectEntity.person)
-                    //Log.d("TAG", "ENTITY DAY - ${objectEntity.call}")
 
                     if (objectEntity.status == "проверен") {
                         checkBoxStatus.isChecked = true

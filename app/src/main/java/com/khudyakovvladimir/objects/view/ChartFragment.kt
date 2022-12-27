@@ -21,7 +21,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class ChartFragment: Fragment() {
@@ -37,7 +36,6 @@ class ChartFragment: Fragment() {
     private lateinit var objectViewModelFactory: ObjectViewModelFactory
 
     var count = 0
-    //var list = emptyList<String>()
     var list = listOf("0")
 
     override fun onAttach(context: Context) {
@@ -60,7 +58,7 @@ class ChartFragment: Fragment() {
 
         var arrayOfDays = list
         //await
-        CoroutineScope(Dispatchers.IO).launch {
+        CoroutineScope(Dispatchers.Main).launch {
             var go = async {
                 getArrayOfDays()
             }
@@ -69,21 +67,23 @@ class ChartFragment: Fragment() {
 
         objectViewModel.getCountOfRows().observe(this) {
             count = it
-            setBarChart(list.size, list)
         }
     }
 
     private fun getArrayOfDays(): List<String> {
-        var vv = emptyList<String>()
+        var mockList = emptyList<String>()
         CoroutineScope(Dispatchers.IO).launch {
             var countOfObjects = async {
                 objectViewModel.objectDao.getListOfDays()
             }
-            val v = countOfObjects.await()
-            vv = v
-            list = vv
+            val coroutineList = countOfObjects.await()
+            mockList = coroutineList
+            list = mockList
+            CoroutineScope(Dispatchers.Main).launch {
+                setBarChart(mockList.size, mockList)
+            }
         }
-        return vv
+        return mockList
     }
 
     private fun setBarChart(count: Int, list: List<String>) {
@@ -91,16 +91,10 @@ class ChartFragment: Fragment() {
         val labels = ArrayList<String>()
 
         //set the y-axis and x-axis
-        Log.d("TAG", "count - $count")
-        Log.d("TAG", "list - $list")
-        for (i in 0..count - 1) {
-            Log.d("TAG", "i - $i")
+        for (i in 0 until count) {
             entries.add(BarEntry(list[i].toFloat(), i))
             labels.add((i + 1).toString())
         }
-
-        Log.d("TAG", "entries - $entries")
-        Log.d("TAG", "labels - $labels")
 
         val barDataSet = BarDataSet(entries, "Объекты")
         val data = BarData(labels, barDataSet)

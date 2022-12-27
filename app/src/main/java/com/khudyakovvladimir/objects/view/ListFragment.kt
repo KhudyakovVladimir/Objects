@@ -127,12 +127,11 @@ class ListFragment: Fragment() {
             list1 = it
             objectAdapter.list = it
             objectAdapter.notifyDataSetChanged()
-            //Log.d("TAG", "objectAdapter.list = $it")
         }
 
         objectViewModel.getListDutyObjects().observe(this) {
             list2 = it
-            //Log.d("TAG", "list2 = $it")
+
             if(isSortByDuty) {
                 objectAdapter.list = list2
                 objectAdapter.notifyDataSetChanged()
@@ -140,7 +139,6 @@ class ListFragment: Fragment() {
         }
 
         objectViewModel.getCountOfRows().observe(this) {
-            //Log.d("TAG", "getCountOfRows() - $it")
         }
 
         objectViewModel.getStatus().observe(this) {
@@ -191,7 +189,7 @@ class ListFragment: Fragment() {
     }
 
     private fun navigateToSingleObject(objectID: Int) {
-        Log.d("TAG", "navigateToSingleObject() - objectId =  $objectID")
+        //Log.d("TAG", "navigateToSingleObject() - objectId =  $objectID")
         val bundle = Bundle()
         bundle.putInt("objectID", objectID)
         findNavController().navigate(R.id.objectFragment, bundle)
