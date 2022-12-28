@@ -227,6 +227,11 @@ class ObjectFragment: Fragment() {
             textViewCall.text = newNumberOfCalls.toString()
         }
 
+        imageViewCall.setOnLongClickListener {
+            textViewCall.text = "0"
+            return@setOnLongClickListener true
+        }
+
         //________________________________________________________________________
 
         if(id != null) {

@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="12"
-            android:textColor="@color/black"/>
+            android:textColor="@color/gray"/>
 
     <TextView
             android:id="@+id/textViewItem2"

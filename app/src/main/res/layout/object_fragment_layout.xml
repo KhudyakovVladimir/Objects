@@ -37,6 +37,7 @@
             android:layout_width="290dp"
             android:layout_height="70dp"
             android:id="@+id/editTextDuty"
+            android:textCursorDrawable="@drawable/custom_edit_text"
             app:layout_constraintTop_toBottomOf="@+id/editTextStatus"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginStart="52dp"/>
