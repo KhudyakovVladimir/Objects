@@ -2,6 +2,8 @@ package com.khudyakovvladimir.objects.view
 
 import android.Manifest
 import android.app.Activity
+import android.app.AlarmManager
+import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -9,7 +11,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ import androidx.navigation.fragment.findNavController
 import com.khudyakovvladimir.objects.R
 import com.khudyakovvladimir.objects.application.appComponent
 import com.khudyakovvladimir.objects.database.ObjectEntity
+import com.khudyakovvladimir.objects.utils.Receiver
 import com.khudyakovvladimir.objects.utils.TimeHelper
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModel
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModelFactory
@@ -154,6 +156,7 @@ class ObjectFragment: Fragment() {
             buttonDelete.isEnabled = true
 
             hideKeyboard()
+            //doInReceiver()
         }
 
         buttonMap.setOnClickListener {
@@ -384,5 +387,36 @@ class ObjectFragment: Fragment() {
     private fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
+    }
+
+    fun doInReceiver() {
+        val alarmManager = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(context, Receiver::class.java)
+
+// Used for filtering inside Broadcast receiver
+        intent.action = "MyBroadcastReceiverAction"
+        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
+
+// In this particular example we are going to set it to trigger after 30 seconds.
+// You can work with time later when you know this works for sure.
+        val msUntilTriggerHour: Long = 15000
+        val alarmTimeAtUTC: Long = System.currentTimeMillis() + msUntilTriggerHour
+
+// Depending on the version of Android use different function for setting an
+// Alarm.
+// setAlarmClock() - used for everything lower than Android M
+// setExactAndAllowWhileIdle() - used for everything on Android M and higher
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
+            alarmManager.setAlarmClock(
+                AlarmManager.AlarmClockInfo(alarmTimeAtUTC, pendingIntent),
+                pendingIntent
+            )
+        } else {
+            alarmManager.setExactAndAllowWhileIdle(
+                AlarmManager.RTC_WAKEUP,
+                alarmTimeAtUTC,
+                pendingIntent
+            )
+        }
     }
 }
