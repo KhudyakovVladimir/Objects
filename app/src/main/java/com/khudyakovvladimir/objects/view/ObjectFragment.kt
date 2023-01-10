@@ -14,6 +14,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.OnBackPressedCallback
 import androidx.core.app.ActivityCompat
@@ -151,6 +152,8 @@ class ObjectFragment: Fragment() {
             buttonAdd.isEnabled = true
             buttonSave.isEnabled = true
             buttonDelete.isEnabled = true
+
+            hideKeyboard()
         }
 
         buttonMap.setOnClickListener {
@@ -219,6 +222,7 @@ class ObjectFragment: Fragment() {
         }
 
         imageViewCall.setOnClickListener {
+            hideKeyboard()
             if(textViewCall.text == "") {
                 textViewCall.text = "0"
             }
@@ -367,5 +371,18 @@ class ObjectFragment: Fragment() {
             toast.setGravity(Gravity.TOP, 0, 150)
             toast.show()
         }
+    }
+
+    fun Fragment.hideKeyboard() {
+        view?.let { activity?.hideKeyboard(it) }
+    }
+
+    fun Activity.hideKeyboard() {
+        hideKeyboard(currentFocus ?: View(this))
+    }
+
+    private fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 }
