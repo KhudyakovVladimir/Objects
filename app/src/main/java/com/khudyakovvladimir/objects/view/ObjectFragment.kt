@@ -58,7 +58,7 @@ class ObjectFragment: Fragment() {
     lateinit var editTextLatitude: EditText
     lateinit var textViewCall: TextView
     lateinit var imageViewCall: ImageView
-    lateinit var imageViewRemind: ImageView
+    lateinit var imageViewNotification: ImageView
     lateinit var editTextPerson: EditText
 
     lateinit var objectEntity: ObjectEntity
@@ -200,13 +200,13 @@ class ObjectFragment: Fragment() {
             }
 
             if(isChecked) {
-                makeToast("Объект обслужен.")
+                //makeToast("Объект обслужен.")
                 CoroutineScope(Dispatchers.IO).launch {
                     objectViewModel.objectDao.insertObjectEntity(
                         generateNewObjectWithCheckbox(id!!, "проверен"))
                 }
             }else {
-                makeToast("Объект не обслужен !")
+                //makeToast("Объект не обслужен !")
                 CoroutineScope(Dispatchers.IO).launch {
                     objectViewModel.objectDao.insertObjectEntity(
                         generateNewObjectWithCheckbox(id!!, "не проверен"))
@@ -240,8 +240,11 @@ class ObjectFragment: Fragment() {
             return@setOnLongClickListener true
         }
 
-        imageViewRemind.setOnClickListener {
-            findNavController().navigate(R.id.notificationFragment)
+        imageViewNotification.setOnClickListener {
+            val id = objectEntity.id
+            val bundle = Bundle()
+            bundle.putInt("id", id)
+            findNavController().navigate(R.id.notificationFragment, bundle)
         }
 
         //________________________________________________________________________
@@ -312,7 +315,7 @@ class ObjectFragment: Fragment() {
         editTextLatitude = view.findViewById(R.id.editTextLatitude)
         textViewCall = view.findViewById(R.id.textViewCall)
         imageViewCall = view.findViewById(R.id.imageViewCall)
-        imageViewRemind = view.findViewById(R.id.imageViewRemind)
+        imageViewNotification = view.findViewById(R.id.imageViewNotification)
         editTextPerson = view.findViewById(R.id.editTextName)
 
         val list = listOf(
@@ -382,7 +385,7 @@ class ObjectFragment: Fragment() {
         }
     }
 
-    fun Fragment.hideKeyboard() {
+    private fun Fragment.hideKeyboard() {
         view?.let { activity?.hideKeyboard(it) }
     }
 
@@ -401,6 +404,7 @@ class ObjectFragment: Fragment() {
 
         //Used for filtering inside Broadcast receiver
         intent.action = "MyBroadcastReceiverAction"
+        //intent.putExtra("","")
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
 
         //time

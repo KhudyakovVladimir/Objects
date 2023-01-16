@@ -312,7 +312,7 @@
             android:layout_width="31dp"
             android:layout_height="52dp"
             app:srcCompat="@drawable/remind"
-            android:id="@+id/imageViewRemind"
+            android:id="@+id/imageViewNotification"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="236dp"
