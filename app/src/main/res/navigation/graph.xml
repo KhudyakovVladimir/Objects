@@ -11,7 +11,12 @@
     <fragment android:id="@+id/objectFragment" android:name="com.khudyakovvladimir.objects.view.ObjectFragment"
               android:label="ObjectFragment">
         <action android:id="@+id/action_objectFragment_to_chartFragment" app:destination="@id/chartFragment"/>
+        <action android:id="@+id/action_objectFragment_to_notificationFragment"
+                app:destination="@id/notificationFragment"/>
     </fragment>
     <fragment android:id="@+id/chartFragment" android:name="com.khudyakovvladimir.objects.view.ChartFragment"
               android:label="ChartFragment"/>
+    <fragment android:id="@+id/notificationFragment"
+              android:name="com.khudyakovvladimir.objects.view.NotificationFragment"
+              android:label="NotificationFragment"/>
 </navigation>

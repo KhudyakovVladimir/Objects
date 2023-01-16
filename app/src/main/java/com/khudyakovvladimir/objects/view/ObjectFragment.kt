@@ -58,6 +58,7 @@ class ObjectFragment: Fragment() {
     lateinit var editTextLatitude: EditText
     lateinit var textViewCall: TextView
     lateinit var imageViewCall: ImageView
+    lateinit var imageViewRemind: ImageView
     lateinit var editTextPerson: EditText
 
     lateinit var objectEntity: ObjectEntity
@@ -156,7 +157,7 @@ class ObjectFragment: Fragment() {
             buttonDelete.isEnabled = true
 
             hideKeyboard()
-            //doInReceiver()
+            doInReceiver()
         }
 
         buttonMap.setOnClickListener {
@@ -239,6 +240,10 @@ class ObjectFragment: Fragment() {
             return@setOnLongClickListener true
         }
 
+        imageViewRemind.setOnClickListener {
+            findNavController().navigate(R.id.notificationFragment)
+        }
+
         //________________________________________________________________________
 
         if(id != null) {
@@ -307,6 +312,7 @@ class ObjectFragment: Fragment() {
         editTextLatitude = view.findViewById(R.id.editTextLatitude)
         textViewCall = view.findViewById(R.id.textViewCall)
         imageViewCall = view.findViewById(R.id.imageViewCall)
+        imageViewRemind = view.findViewById(R.id.imageViewRemind)
         editTextPerson = view.findViewById(R.id.editTextName)
 
         val list = listOf(
@@ -389,23 +395,22 @@ class ObjectFragment: Fragment() {
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
-    fun doInReceiver() {
+    private fun doInReceiver() {
         val alarmManager = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val intent = Intent(context, Receiver::class.java)
 
-// Used for filtering inside Broadcast receiver
+        //Used for filtering inside Broadcast receiver
         intent.action = "MyBroadcastReceiverAction"
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
 
-// In this particular example we are going to set it to trigger after 30 seconds.
-// You can work with time later when you know this works for sure.
+        //time
         val msUntilTriggerHour: Long = 15000
         val alarmTimeAtUTC: Long = System.currentTimeMillis() + msUntilTriggerHour
 
-// Depending on the version of Android use different function for setting an
-// Alarm.
-// setAlarmClock() - used for everything lower than Android M
-// setExactAndAllowWhileIdle() - used for everything on Android M and higher
+        //Depending on the version of Android use different function for setting an
+        //Alarm.
+        //setAlarmClock() - used for everything lower than Android M
+        //setExactAndAllowWhileIdle() - used for everything on Android M and higher
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             alarmManager.setAlarmClock(
                 AlarmManager.AlarmClockInfo(alarmTimeAtUTC, pendingIntent),
@@ -419,4 +424,5 @@ class ObjectFragment: Fragment() {
             )
         }
     }
+
 }
