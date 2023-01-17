@@ -83,18 +83,13 @@ class NotificationFragment: Fragment() {
         intent.putExtra("id", "$id")
 
         //Used for filtering inside Broadcast receiver
-        intent.action = "MyBroadcastReceiverAction"
+        //intent.action = "activity"
+        intent.action = "service"
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
 
         //time
-        //val msUntilTriggerHour: Long = 15000
-        //val alarmTimeAtUTC: Long = System.currentTimeMillis() + msUntilTriggerHour
         val alarmTimeAtUTC: Long = System.currentTimeMillis() + delay
 
-        //Depending on the version of Android use different function for setting an
-        //Alarm.
-        //setAlarmClock() - used for everything lower than Android M
-        //setExactAndAllowWhileIdle() - used for everything on Android M and higher
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             alarmManager.setAlarmClock(
                 AlarmManager.AlarmClockInfo(alarmTimeAtUTC, pendingIntent),
