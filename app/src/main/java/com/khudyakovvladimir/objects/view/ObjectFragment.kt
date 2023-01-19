@@ -157,7 +157,6 @@ class ObjectFragment: Fragment() {
             buttonDelete.isEnabled = true
 
             hideKeyboard()
-            doInReceiver()
         }
 
         buttonMap.setOnClickListener {
@@ -397,36 +396,4 @@ class ObjectFragment: Fragment() {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
-
-    private fun doInReceiver() {
-        val alarmManager = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-        val intent = Intent(context, Receiver::class.java)
-
-        //Used for filtering inside Broadcast receiver
-        intent.action = "MyBroadcastReceiverAction"
-        //intent.putExtra("","")
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
-
-        //time
-        val msUntilTriggerHour: Long = 15000
-        val alarmTimeAtUTC: Long = System.currentTimeMillis() + msUntilTriggerHour
-
-        //Depending on the version of Android use different function for setting an
-        //Alarm.
-        //setAlarmClock() - used for everything lower than Android M
-        //setExactAndAllowWhileIdle() - used for everything on Android M and higher
-        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
-            alarmManager.setAlarmClock(
-                AlarmManager.AlarmClockInfo(alarmTimeAtUTC, pendingIntent),
-                pendingIntent
-            )
-        } else {
-            alarmManager.setExactAndAllowWhileIdle(
-                AlarmManager.RTC_WAKEUP,
-                alarmTimeAtUTC,
-                pendingIntent
-            )
-        }
-    }
-
 }

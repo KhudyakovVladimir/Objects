@@ -28,20 +28,6 @@ class ObjectService: Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         Log.d("TAG", "ObjectService onStartCommand()")
 
-        val pendingIntent: PendingIntent =
-            Intent(applicationContext, ObjectService::class.java).let { notificationIntent ->
-                PendingIntent.getActivity(applicationContext, 0, notificationIntent,
-                    PendingIntent.FLAG_MUTABLE)
-            }
-
-//        val notification: Notification = Notification.Builder(applicationContext, "1")
-//            .setContentTitle("title")
-//            .setContentText("message")
-//            .setSmallIcon(R.drawable.eso_icon)
-//            .setContentIntent(pendingIntent)
-//            .setTicker("ticker text")
-//            .build()
-
         val soundUri = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://"+ applicationContext.packageName + "/" + R.raw.notification_sound)
         val audioAttributes: AudioAttributes = AudioAttributes.Builder()
             .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
@@ -93,8 +79,6 @@ class ObjectService: Service() {
             startForeground(1, notification)
         }
 
-        //startForeground(1, notification)
-
         return START_STICKY
     }
 
@@ -103,20 +87,5 @@ class ObjectService: Service() {
         Log.d("TAG", "ObjectService onCreate()")
         super.onCreate()
 
-//        val pendingIntent: PendingIntent =
-//            Intent(applicationContext, ObjectService::class.java).let { notificationIntent ->
-//                PendingIntent.getActivity(applicationContext, 0, notificationIntent,
-//                    PendingIntent.FLAG_IMMUTABLE)
-//            }
-//
-//        val notification: Notification = Notification.Builder(applicationContext, "1")
-//            .setContentTitle("title")
-//            .setContentText("message")
-//            .setSmallIcon(R.drawable.eso_icon)
-//            .setContentIntent(pendingIntent)
-//            .setTicker("ticker text")
-//            .build()
-//
-//        startForeground(1, notification)
     }
 }

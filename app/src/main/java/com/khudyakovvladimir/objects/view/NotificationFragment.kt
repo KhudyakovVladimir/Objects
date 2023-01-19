@@ -83,7 +83,6 @@ class NotificationFragment: Fragment() {
         intent.putExtra("id", "$id")
 
         //Used for filtering inside Broadcast receiver
-        //intent.action = "activity"
         intent.action = "service"
         val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
 
