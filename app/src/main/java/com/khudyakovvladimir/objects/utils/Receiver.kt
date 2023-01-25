@@ -23,12 +23,19 @@ class Receiver: BroadcastReceiver() {
             Log.d("TAG", "activity")
             val i = Intent(p0!!.applicationContext, MainActivity::class.java )
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            i.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
             p0.startActivity(i)
         }
 
         if(p1?.action == "service") {
             Log.d("TAG", "service")
             val i = Intent(p0!!.applicationContext, ObjectService::class.java )
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            i.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+            val v = p1.extras
+            val vv = v!!.get("id")
+            i.putExtra("id", "$vv")
+            Log.d("TAG", "Receiver - onReceive() - extras = $vv")
             p0.startForegroundService(i)
         }
     }

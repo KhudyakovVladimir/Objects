@@ -7,6 +7,7 @@ import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -82,12 +83,18 @@ class NotificationFragment: Fragment() {
 
         intent.putExtra("id", "$id")
 
+        Log.d("TAG", "doInReceiver() - id = $id")
+
         //Used for filtering inside Broadcast receiver
         intent.action = "service"
-        val pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_MUTABLE)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        intent.flags = Intent.FLAG_ACTIVITY_SINGLE_TOP
+
+        val pendingIntent = PendingIntent.getBroadcast(context, id, intent, PendingIntent.FLAG_MUTABLE)
 
         //time
         val alarmTimeAtUTC: Long = System.currentTimeMillis() + delay
+        //val alarmTimeAtUTC: Long = System.currentTimeMillis() + 10000
 
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             alarmManager.setAlarmClock(
@@ -111,4 +118,5 @@ class NotificationFragment: Fragment() {
             toast.show()
         }
     }
+
 }
