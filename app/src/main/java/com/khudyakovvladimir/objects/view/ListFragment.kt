@@ -3,7 +3,6 @@ package com.khudyakovvladimir.objects.view
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -189,7 +188,6 @@ class ListFragment: Fragment() {
     }
 
     private fun navigateToSingleObject(objectID: Int) {
-        //Log.d("TAG", "navigateToSingleObject() - objectId =  $objectID")
         val bundle = Bundle()
         bundle.putInt("objectID", objectID)
         findNavController().navigate(R.id.objectFragment, bundle)

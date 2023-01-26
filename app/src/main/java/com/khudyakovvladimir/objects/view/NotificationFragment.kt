@@ -71,7 +71,6 @@ class NotificationFragment: Fragment() {
 
             if (customTime > currentTime) {
                 makeToast(timeHelper.getCurrentTimeForNotification(customCalendar.time))
-                //makeToast(delay.toString())
                 doInReceiver(delay, id)
             }
         }
@@ -83,8 +82,6 @@ class NotificationFragment: Fragment() {
 
         intent.putExtra("id", "$id")
 
-        Log.d("TAG", "doInReceiver() - id = $id")
-
         //Used for filtering inside Broadcast receiver
         intent.action = "service"
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
@@ -94,7 +91,6 @@ class NotificationFragment: Fragment() {
 
         //time
         val alarmTimeAtUTC: Long = System.currentTimeMillis() + delay
-        //val alarmTimeAtUTC: Long = System.currentTimeMillis() + 10000
 
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.M) {
             alarmManager.setAlarmClock(

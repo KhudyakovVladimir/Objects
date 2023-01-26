@@ -265,6 +265,7 @@ class ObjectFragment: Fragment() {
                 var tempObject1 = async {
                     objectViewModel.objectDao.getObjectById(id!!)
                 }
+
                 objectEntity = tempObject1.await()
 
                 CoroutineScope(Dispatchers.Main).launch {
