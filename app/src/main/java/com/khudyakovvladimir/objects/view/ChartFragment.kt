@@ -8,10 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.khudyakovvladimir.objects.R
 import com.khudyakovvladimir.objects.application.appComponent
 import com.khudyakovvladimir.objects.utils.TimeHelper
@@ -35,6 +37,8 @@ class ChartFragment: Fragment() {
     private lateinit var objectViewModel: ObjectViewModel
     private lateinit var objectViewModelFactory: ObjectViewModelFactory
 
+    private lateinit var fab : FloatingActionButton
+
     var count = 0
     var list = listOf("0")
 
@@ -55,6 +59,14 @@ class ChartFragment: Fragment() {
         objectViewModel = ViewModelProvider(this, objectViewModelFactory)[ObjectViewModel::class.java]
 
         barChart = view.findViewById(R.id.barChart)
+
+        fab = view.findViewById(R.id.floatingActionButton)
+        fab.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                statusRefresh()
+                findNavController().navigate(R.id.listFragment)
+            }
+        }
 
         var arrayOfDays = list
         //await
@@ -102,6 +114,20 @@ class ChartFragment: Fragment() {
         barChart.setDescription("Количество посещений")
         barDataSet.color = resources.getColor(R.color.red)
         barChart.animateY(1000)
+    }
+
+    private fun statusRefresh() {
+        CoroutineScope(Dispatchers.IO).launch {
+            var list = objectViewModel.getListObjectAsList()
+
+            var listSize = list.size
+            for (x in 1..listSize) {
+                var object1 = objectViewModel.objectDao.getObjectById(x)
+                object1.status = "не проверен"
+                object1.call = "0"
+                objectViewModel.objectDao.insertObjectEntity(object1)
+            }
+        }
     }
 
 }

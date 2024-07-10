@@ -1,8 +1,11 @@
 package com.khudyakovvladimir.objects.view
 
+import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +25,10 @@ import com.khudyakovvladimir.objects.database.ObjectEntity
 import com.khudyakovvladimir.objects.recyclerview.ObjectAdapter
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModel
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModelFactory
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ListFragment: Fragment() {
@@ -75,6 +82,7 @@ class ListFragment: Fragment() {
         return inflater.inflate(R.layout.list_fragment_layout, container, false)
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -150,6 +158,7 @@ class ListFragment: Fragment() {
 
         fab.setOnClickListener {
             findNavController().navigate(R.id.objectFragment)
+            //CoroutineScope(Dispatchers.Main).launch { statusRefresh() }
         }
 
         button.setOnClickListener {
