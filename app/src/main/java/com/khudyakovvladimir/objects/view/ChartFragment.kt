@@ -1,11 +1,14 @@
 package com.khudyakovvladimir.objects.view
 
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -23,6 +26,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileInputStream
 import javax.inject.Inject
 
 class ChartFragment: Fragment() {
@@ -37,7 +43,9 @@ class ChartFragment: Fragment() {
     private lateinit var objectViewModel: ObjectViewModel
     private lateinit var objectViewModelFactory: ObjectViewModelFactory
 
-    private lateinit var fab : FloatingActionButton
+    private lateinit var buttonClear : Button
+    private lateinit var buttonSave : Button
+    private lateinit var buttonLoad : Button
 
     var count = 0
     var list = listOf("0")
@@ -52,6 +60,7 @@ class ChartFragment: Fragment() {
         return inflater.inflate(R.layout.chart_fragment_layout, container, false)
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -60,13 +69,24 @@ class ChartFragment: Fragment() {
 
         barChart = view.findViewById(R.id.barChart)
 
-        fab = view.findViewById(R.id.floatingActionButton)
-        fab.setOnClickListener {
-            CoroutineScope(Dispatchers.Main).launch {
+        buttonClear = view.findViewById(R.id.buttonClear)
+        buttonSave = view.findViewById(R.id.buttonSave)
+        buttonLoad = view.findViewById(R.id.buttonLoad)
+
+        buttonClear.setOnClickListener {
+                        CoroutineScope(Dispatchers.Main).launch {
                 statusRefresh()
                 findNavController().navigate(R.id.listFragment)
             }
         }
+
+        buttonSave.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                writeTextToFile(convertDatabaseDataToText())
+            }
+        }
+
+        buttonLoad.setOnClickListener {  }
 
         var arrayOfDays = list
         //await
@@ -130,4 +150,70 @@ class ChartFragment: Fragment() {
         }
     }
 
+    private suspend fun convertDatabaseDataToText() : String = withContext(Dispatchers.IO) {
+        val list = objectViewModel.getListObjectAsList()
+
+        val string = StringBuilder()
+
+        val listSize = list.size
+        for (x in 1..listSize) {
+            val object1 = objectViewModel.objectDao.getObjectById(x)
+            string.append("^")
+            string.append(object1.id)
+            string.append(",")
+            string.append(object1.title)
+            string.append(",")
+            string.append(object1.phone)
+            string.append(",")
+            string.append(object1.status)
+            string.append(",")
+            string.append(object1.duty)
+            string.append(",")
+            string.append(object1.address)
+            string.append(",")
+            string.append(object1.comment)
+            string.append(",")
+            string.append(object1.call)
+            string.append(",")
+            string.append(object1.longitude)
+            string.append(",")
+            string.append(object1.latitude)
+            string.append(",")
+            string.append(object1.person)
+        }
+        return@withContext string.toString()
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun writeTextToFile(text : String) {
+        Log.d("TAG", "writeTextToFile")
+
+        //val applicationDataPath = context!!.applicationInfo.dataDir
+        val pathAppFolder = context!!.filesDir
+        val pathDocumentsFolder = "/storage/emulated/0/documents"
+
+        val backUpFileAppFolder = File(pathAppFolder, "backUpFileAppFolder")
+        backUpFileAppFolder.createNewFile()
+        backUpFileAppFolder.appendText(text)
+
+        val backUpFileDocumentsFolder = File(pathAppFolder, "backUpFileDocumentsFolder")
+        backUpFileDocumentsFolder.createNewFile()
+        backUpFileDocumentsFolder.appendText(text)
+
+        val readResultBackUpFileAppFolder =
+            FileInputStream(backUpFileDocumentsFolder)
+                .bufferedReader()
+                .use { it.readText() }
+
+        val readResultBackUpFileDocumentsFolder =
+            FileInputStream(backUpFileDocumentsFolder)
+                .bufferedReader()
+                .use { it.readText() }
+
+        Log.d("TAG", "readResultBackUpFileAppFolder = $readResultBackUpFileAppFolder")
+        Log.d("TAG", "readResultBackUpFileDocumentsFolder = $readResultBackUpFileDocumentsFolder")
+
+        backUpFileAppFolder.delete()
+        backUpFileDocumentsFolder.delete()
+    }
 }

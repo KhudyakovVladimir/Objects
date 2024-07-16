@@ -1,11 +1,9 @@
 package com.khudyakovvladimir.objects.view
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -25,11 +23,8 @@ import com.khudyakovvladimir.objects.database.ObjectEntity
 import com.khudyakovvladimir.objects.recyclerview.ObjectAdapter
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModel
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModelFactory
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import javax.inject.Inject
+
 
 class ListFragment: Fragment() {
 
@@ -70,8 +65,6 @@ class ListFragment: Fragment() {
 
         if (!isDatabaseCreated) {
             val dbHelper = activity?.let { DBHelper(it) }
-            dbHelper?.createDatabase()
-
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
             editor.putBoolean("database", true)
             editor.apply()
