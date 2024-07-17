@@ -16,9 +16,9 @@ import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.khudyakovvladimir.objects.R
 import com.khudyakovvladimir.objects.application.appComponent
+import com.khudyakovvladimir.objects.database.ObjectEntity
 import com.khudyakovvladimir.objects.utils.TimeHelper
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModel
 import com.khudyakovvladimir.objects.viewmodel.ObjectViewModelFactory
@@ -83,10 +83,16 @@ class ChartFragment: Fragment() {
         buttonSave.setOnClickListener {
             CoroutineScope(Dispatchers.Main).launch {
                 writeTextToFile(convertDatabaseDataToText())
+                findNavController().navigate(R.id.listFragment)
             }
         }
 
-        buttonLoad.setOnClickListener {  }
+        buttonLoad.setOnClickListener {
+            CoroutineScope(Dispatchers.Main).launch {
+                convertTextToDataBaseEntity(readTextFromFile())
+                findNavController().navigate(R.id.listFragment)
+            }
+        }
 
         var arrayOfDays = list
         //await
@@ -188,32 +194,59 @@ class ChartFragment: Fragment() {
     private fun writeTextToFile(text : String) {
         Log.d("TAG", "writeTextToFile")
 
-        //val applicationDataPath = context!!.applicationInfo.dataDir
-        val pathAppFolder = context!!.filesDir
         val pathDocumentsFolder = "/storage/emulated/0/documents"
 
-        val backUpFileAppFolder = File(pathAppFolder, "backUpFileAppFolder")
-        backUpFileAppFolder.createNewFile()
-        backUpFileAppFolder.appendText(text)
+        val backUpFileDocumentsFolder = File(pathDocumentsFolder, "backUpFileDocumentsFolder")
 
-        val backUpFileDocumentsFolder = File(pathAppFolder, "backUpFileDocumentsFolder")
-        backUpFileDocumentsFolder.createNewFile()
-        backUpFileDocumentsFolder.appendText(text)
+        if (backUpFileDocumentsFolder.exists()) {
+            backUpFileDocumentsFolder.delete()
+            backUpFileDocumentsFolder.createNewFile()
+            backUpFileDocumentsFolder.appendText(text)
+        }
+        else {
+            backUpFileDocumentsFolder.createNewFile()
+            backUpFileDocumentsFolder.appendText(text)
+        }
+    }
 
-        val readResultBackUpFileAppFolder =
-            FileInputStream(backUpFileDocumentsFolder)
-                .bufferedReader()
-                .use { it.readText() }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun readTextFromFile() : String {
+        val pathDocumentsFolder = "/storage/emulated/0/documents"
+        val backUpFileDocumentsFolder = File(pathDocumentsFolder, "backUpFileDocumentsFolder")
 
         val readResultBackUpFileDocumentsFolder =
             FileInputStream(backUpFileDocumentsFolder)
                 .bufferedReader()
                 .use { it.readText() }
 
-        Log.d("TAG", "readResultBackUpFileAppFolder = $readResultBackUpFileAppFolder")
-        Log.d("TAG", "readResultBackUpFileDocumentsFolder = $readResultBackUpFileDocumentsFolder")
+        Log.d("TAG", "readTextFromFile() - readResultBackUpFileDocumentsFolder = $readResultBackUpFileDocumentsFolder")
 
-        backUpFileAppFolder.delete()
-        backUpFileDocumentsFolder.delete()
+        return readResultBackUpFileDocumentsFolder
+    }
+
+    private suspend fun convertTextToDataBaseEntity(text: String) = withContext(Dispatchers.IO) {
+
+        val countOfCells = text.length - 1
+        var countOfEntities = 0
+        val listOfObjects: ArrayList<String> = text.split("^") as ArrayList<String>
+        listOfObjects.removeAt(0)
+
+        for (i in 0..countOfCells) {
+            val a = text[i]
+            if (a == '^') {
+                countOfEntities++
+            }
+        }
+
+        for (i in 0 until listOfObjects.size) {
+            val str = listOfObjects[i].split(",")
+            val objectEntity = ObjectEntity(str[0].toInt(), str[1], str[2], str[3], str[4], str[5], str[6], str[7], str[8], str[9], str[10])
+            objectViewModel.objectDao.insertObjectEntity(objectEntity)
+            Log.d("TAG", "convertTextToDataBaseEntity() - str = $str")
+        }
+
+        Log.d("TAG", "convertTextToDataBaseEntity() - count2 = $countOfEntities")
+        Log.d("TAG", "convertTextToDataBaseEntity() - listOfObjects = $listOfObjects")
+        Log.d("TAG", "convertTextToDataBaseEntity() - listOfObjects = ${listOfObjects.size}")
     }
 }
