@@ -11,6 +11,7 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
@@ -119,6 +120,9 @@ class ObjectFragment: Fragment() {
             CoroutineScope(Dispatchers.IO).launch {
                 if(id == null) {
                     id = generateNewID()
+                    if(id!! < 1) {
+                        id = 1
+                    }
                 }
 
                 var isChecked = "не проверен"
@@ -137,9 +141,8 @@ class ObjectFragment: Fragment() {
 
         buttonDelete.setOnClickListener {
             CoroutineScope(Dispatchers.IO).launch {
-                objectViewModel.objectDao.deleteObjectEntity(
-                    generateNewObject(id!!)
-                )
+                objectViewModel.objectDao.deleteObjectByID(id!!)
+                updateIdInDataBase(id!!)
 
                 CoroutineScope(Dispatchers.Main).launch {
                     findNavController().navigate(R.id.listFragment)
@@ -352,6 +355,32 @@ class ObjectFragment: Fragment() {
             editTextLatitude.text.toString(),
             editTextPerson.text.toString()
         )
+    }
+
+    private suspend fun updateIdInDataBase(idOfDeletedEntity : Int) {
+
+        Log.d("TAG", "updateIdInDataBase() - idOfDeletedEntity = $idOfDeletedEntity")
+        var listOfId = arrayListOf<Int>()
+        var countOfRows = objectViewModel.objectDao.getCountOfRowsAsInt()
+        Log.d("TAG", "updateIdInDataBase() - countOfRows = $countOfRows")
+        if(idOfDeletedEntity <= countOfRows) {
+            for (x in idOfDeletedEntity + 1..countOfRows + 1) {
+                Log.d("TAG", "updateIdInDataBase() - x = $x")
+                listOfId.add(x)
+            }
+            Log.d("TAG", "updateIdInDataBase() - listOfId = $listOfId")
+
+            Log.d("TAG", "updateIdInDataBase() - listOfId[0] = ${listOfId[0]}")
+            Log.d("TAG", "updateIdInDataBase() - listOfId.lastIndex = ${listOfId.lastIndex}")
+
+            for (y in listOfId[0]..listOfId[listOfId.lastIndex]) {
+                Log.d("TAG", "updateIdInDataBase() - y = $y")
+                val objectEntity = objectViewModel.objectDao.getObjectById(y)
+                objectEntity.id = y - 1
+                objectViewModel.objectDao.insertObjectEntity(objectEntity)
+            }
+            objectViewModel.objectDao.deleteObjectByID(listOfId[listOfId.lastIndex])
+        }
     }
 
     private fun generateNewObjectWithCheckbox(id: Int, isChecked: String): ObjectEntity {

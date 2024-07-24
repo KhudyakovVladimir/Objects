@@ -24,6 +24,9 @@ interface ObjectDao {
     @Query("SELECT COUNT(id) FROM objects")
     fun getCountOfRows(): LiveData<Int>
 
+    @Query("SELECT COUNT(id) FROM objects")
+    fun getCountOfRowsAsInt(): Int
+
     @Query("SELECT COUNT(id) FROM objects WHERE status LIKE :value")
     fun getStatus(value: String): LiveData<Int>
 
@@ -44,6 +47,9 @@ interface ObjectDao {
 
     @Delete
     fun deleteObjectEntity(objectEntity: ObjectEntity)
+
+    @Query("DELETE FROM objects WHERE id = :id")
+    fun deleteObjectByID(id : Int)
 
     @Update
     fun updateObjEntity(objectEntity: ObjectEntity)
