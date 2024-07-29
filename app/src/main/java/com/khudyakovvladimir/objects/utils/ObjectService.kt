@@ -70,8 +70,8 @@ class ObjectService: Service() {
 
                 val builder: NotificationCompat.Builder =
                     NotificationCompat.Builder(applicationContext, "3")
-                        .setSmallIcon(R.drawable.eso_icon)
-                        .setLargeIcon((AppCompatResources.getDrawable(applicationContext, R.drawable.eso_icon)!! as BitmapDrawable).bitmap)
+                        .setSmallIcon(R.drawable.faer_icon)
+                        .setLargeIcon((AppCompatResources.getDrawable(applicationContext, R.drawable.faer_icon)!! as BitmapDrawable).bitmap)
                         .setContentTitle("Объект №")
                         .setContentText("$extras")
                         .setPriority(NotificationCompat.PRIORITY_HIGH)
@@ -82,7 +82,7 @@ class ObjectService: Service() {
                         .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
                         .setLights(-16711936, 0,1)
                         .setContentIntent(pendingIntent)
-                        .addAction(R.drawable.eso_icon, "close", pi)
+                        .addAction(R.drawable.faer_icon, "close", pi)
 
                 val notification = builder.build()
                 notification.flags = Notification.FLAG_AUTO_CANCEL

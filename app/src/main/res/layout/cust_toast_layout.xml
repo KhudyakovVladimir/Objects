@@ -18,7 +18,7 @@
     <ImageView
             android:layout_height="wrap_content"
             android:layout_width="fill_parent"
-            android:src="@drawable/eso_icon"
+            android:src="@drawable/faer_icon"
             android:layout_below="@+id/textView1"
             android:layout_margin="5dip"
             android:id="@+id/imageView1">

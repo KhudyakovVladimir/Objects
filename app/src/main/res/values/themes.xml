@@ -32,7 +32,7 @@
     
     <style name="Theme.Objects.Launcher">
         <item name="android:windowBackground">
-            @drawable/eso
+            @drawable/logo
         </item>
     </style>
 
