@@ -45,9 +45,11 @@ class ListFragment: Fragment() {
     lateinit var textView2: TextView
     private var isDatabaseCreated = false
     private var isSortByDuty = false
+    private var isSortByStaus = false
 
-    lateinit var list1: List<ObjectEntity>
-    lateinit var list2: List<ObjectEntity>
+    lateinit var listOfObjects: List<ObjectEntity>
+    lateinit var listOfDutyObjects: List<ObjectEntity>
+    lateinit var listOfStatusObjects: List<ObjectEntity>
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -63,6 +65,10 @@ class ListFragment: Fragment() {
         if (sharedPreferences.contains("sortByDuty")) {
             isSortByDuty = sharedPreferences.getBoolean("sortByDuty", false)
         }
+
+//        if (sharedPreferences.contains("sortByStatus")) {
+//            isSortByStaus = sharedPreferences.getBoolean("sortByStatus", false)
+//        }
 
         if (!isDatabaseCreated) {
             val dbHelper = activity?.let { DBHelper(it) }
@@ -125,16 +131,25 @@ class ListFragment: Fragment() {
         recyclerView.adapter = objectAdapter
 
         objectViewModel.getListObjects().observe(this) {
-            list1 = it
+            listOfObjects = it
             objectAdapter.list = it
             objectAdapter.notifyDataSetChanged()
         }
 
         objectViewModel.getListDutyObjects().observe(this) {
-            list2 = it
+            listOfDutyObjects = it
 
             if(isSortByDuty) {
-                objectAdapter.list = list2
+                objectAdapter.list = listOfDutyObjects
+                objectAdapter.notifyDataSetChanged()
+            }
+        }
+
+        objectViewModel.getListOfStatusObjects().observe(this) {
+            listOfStatusObjects = it
+
+            if (isSortByStaus) {
+                objectAdapter.list = listOfStatusObjects
                 objectAdapter.notifyDataSetChanged()
             }
         }
@@ -157,7 +172,7 @@ class ListFragment: Fragment() {
         }
 
         button.setOnClickListener {
-            objectAdapter.list = list2
+            objectAdapter.list = listOfDutyObjects
             objectAdapter.notifyDataSetChanged()
 
             val sharedPreferences = activity?.applicationContext!!.getSharedPreferences("settings", AppCompatActivity.MODE_PRIVATE)
@@ -172,17 +187,29 @@ class ListFragment: Fragment() {
         }
 
         button2.setOnClickListener {
-            objectAdapter.list = list1
+//            objectAdapter.list = list1OfObjects
+//            objectAdapter.notifyDataSetChanged()
+//
+//            val sharedPreferences = activity?.applicationContext!!.getSharedPreferences("settings", AppCompatActivity.MODE_PRIVATE)
+//
+//            if (sharedPreferences.contains("sortByDuty")) {
+//                isSortByDuty = sharedPreferences.getBoolean("sortByDuty", false)
+//            }
+//
+//            val editor: SharedPreferences.Editor = sharedPreferences.edit()
+//            editor.putBoolean("sortByDuty", false)
+//            editor.apply()
+            objectAdapter.list = listOfStatusObjects
             objectAdapter.notifyDataSetChanged()
 
             val sharedPreferences = activity?.applicationContext!!.getSharedPreferences("settings", AppCompatActivity.MODE_PRIVATE)
 
-            if (sharedPreferences.contains("sortByDuty")) {
-                isSortByDuty = sharedPreferences.getBoolean("sortByDuty", false)
+            if (sharedPreferences.contains("sortByStatus")) {
+                isSortByDuty = sharedPreferences.getBoolean("sortByStatus", false)
             }
 
             val editor: SharedPreferences.Editor = sharedPreferences.edit()
-            editor.putBoolean("sortByDuty", false)
+            editor.putBoolean("sortByStatus", false)
             editor.apply()
         }
 

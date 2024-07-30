@@ -21,6 +21,9 @@ interface ObjectDao {
     @Query("SELECT * FROM objects ORDER by duty DESC")
     fun getAllDutyObjectsAsLiveData(): LiveData<List<ObjectEntity>>?
 
+    @Query("SELECT * FROM objects ORDER by status DESC")
+    fun getAllStatusObjectsAsLiveData(): LiveData<List<ObjectEntity>>
+
     @Query("SELECT COUNT(id) FROM objects")
     fun getCountOfRows(): LiveData<Int>
 

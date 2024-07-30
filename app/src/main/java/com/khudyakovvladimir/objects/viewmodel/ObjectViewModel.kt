@@ -16,12 +16,17 @@ class ObjectViewModel @Inject constructor(
     val timeHelper: TimeHelper
 ): AndroidViewModel(application) {
 
+    private var listOfStatusObjects: LiveData<List<ObjectEntity>> = objectDao.getAllStatusObjectsAsLiveData()
     private var listDutyObjects: LiveData<List<ObjectEntity>> = objectDao.getAllDutyObjectsAsLiveData()!!
     private var listObjects: LiveData<List<ObjectEntity>> = objectDao.getAllObjectsAsLiveData()!!
     private var objectsList: ArrayList<ObjectEntity>? = null
     private var countOfRows: LiveData<Int> = objectDao.getCountOfRows()
     private var status: LiveData<Int> = objectDao.getStatus("проверен")
     private var duty: LiveData<Int> = objectDao.getDuty("")
+
+    fun getListOfStatusObjects(): LiveData<List<ObjectEntity>> {
+        return listOfStatusObjects
+    }
 
     fun getListDutyObjects(): LiveData<List<ObjectEntity>> {
         return listDutyObjects
